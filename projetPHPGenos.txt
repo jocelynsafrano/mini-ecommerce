@@ -1,0 +1,10 @@
+Faire un BO qui permettra la gestion des suerrs, ces derniers
+pouront se connecter au BO (email, mdp etc.),
+champ de date de créa/modif et auteur de la création/modif.
+Pouvoir créer des catégories de produit, une table produit
+(nom, categorie, prix achat, prix vente)
+Fonction recherche pour le produit (par nom),
+Module client (nom, prenom, email, mdp, tel, adresse (code postal, ville (avec table ville dans la bdd))
+Modulee commande (voir commande passée par les clients (table commande ligne (chaque ligne de la commande))
+Inscription du client et connexion + pouvoir afficher la liste des produits et
+en rajouter dans un panier et valider la commande

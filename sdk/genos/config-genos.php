@@ -1,5 +1,5 @@
 <?php 
-	
+echo 'config genos required';
 	//Genos use auto increment field and attribute id as primary key
 	// If you want to use another field/attribute as primary key set following variable
 	// If it's false you'll have to add attribute primary_key in your class
@@ -17,7 +17,7 @@
 	$DATABASE_HOST ='localhost';
 	$DATABASE_PORT ='3306';
 	$DATABASE_USER ='root';
-	$DATABASE_PSWD ='';
+	$DATABASE_PSWD ='3EhF!t&TtHf3\'s';
 
 	define("ID_PRIMARY_DEFAULT",$ID_PRIMARY_DEFAULT);
 	define("TABLE_CASE",$TABLE_CASE);
@@ -28,6 +28,5 @@
 	define("DATABASE_PSWD",$DATABASE_PSWD);
 
 	include(__DIR__."/genos.php");
-	
-	
-	
+
+	var_dump(__DIR__);
