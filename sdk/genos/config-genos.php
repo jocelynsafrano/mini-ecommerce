@@ -1,5 +1,4 @@
 <?php 
-echo 'config genos required';
 	//Genos use auto increment field and attribute id as primary key
 	// If you want to use another field/attribute as primary key set following variable
 	// If it's false you'll have to add attribute primary_key in your class
@@ -28,5 +27,3 @@ echo 'config genos required';
 	define("DATABASE_PSWD",$DATABASE_PSWD);
 
 	include(__DIR__."/genos.php");
-
-	var_dump(__DIR__);

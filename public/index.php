@@ -1,4 +1,7 @@
 <?php
+
+// Ici on intiialise les sessions même si le'utilsateure n'est pas connecté. s'il est connécté on assignera alors les avariables de sessions
+session_start();
 /************************************************************
 Ce fichier est un fichier de routing, ce qui veux dire que ce fichier va appeller la bonne aciton sur le bon controller du bon module situé dans le dossier "class" à la racine du dossier
 
@@ -11,17 +14,26 @@ Ces vues sont générés en utilisant le templating qui est expliqué dans le fi
 // On requiert les /frameworks et les ficiers de configuration
 require('../config.php');
 require('../class/auth/auth.php');
-require('../class/client/client.php');
+require('../class/utilisateurs/utilisateurs.php');
 require('../class/commande/commande.php');
 require('../class/panier/panier.php');
+require('../class/produit/produit.php');
 
-// Si le paremetre controller est passé en url...
 if(isset($_GET['controller']) && isset($_GET['action'])){
 
     $className = $_GET['controller'];
 
-    $class = new $className;
-    $functionName = $_GET['action'];
-    $class->$functionName($_POST, $_GET);
 
+    $functionName = $_GET['action'];
+
+    if($_GET['controller'] == 'auth'){
+        $u = new utilisateurs;
+        $class = new $className($_POST, $_GET, $u);
+        
+        $class->$functionName();
+    } else{
+        $class = new $className($_POST, $_GET);
+        
+        $class->$functionName();
+    }
 }
