@@ -33,7 +33,10 @@
   endforeach;?>
     </tbody>
   </table>
+<a class="btn btn-primary" href="index.php?controller=commande_produit&amp;action=store" role="button">Valider la commande</a>
+  
 </div>  
+
 <?php $content = ob_get_clean(); ?>
 
 <?php require '../views/index.php';?>
