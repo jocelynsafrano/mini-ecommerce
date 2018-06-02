@@ -28,7 +28,7 @@ class panier{
         
         $users = $this->StructList($query, $returnFields);
         
-        require '../views/templates/utilisateurs/index.php';
+        require '../views/templates/panier/index.php';
     }
 
     public function create(){

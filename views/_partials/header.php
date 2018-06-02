@@ -18,7 +18,7 @@
           <a class="dropdown-item" href="index.php?controller=produit&amp;action=index">Produits</a>
           <a class="dropdown-item" href="index.php?controller=utilisateurs&amp;action=index">Clients</a>
           <a class="dropdown-item" href="index.php?controller=commandes&amp;action=index">Commandes</a>
-          <a class="dropdown-item" href="index.php?controller=panier&amp;action=index">Panier</a>
+          <a class="dropdown-item" href="index.php?controller=panier_produit&amp;action=index">Panier</a>
         </div>
       </li>
     </ul>

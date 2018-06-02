@@ -32,12 +32,14 @@ class panier_produit{
         }
 
         // TODO select all the products in the cart
-        $query = 'SELECT id, nom, description, email FROM utilisateurs WHERE role_id = 2';
-        $returnFields = ['id', 'nom', 'prenom', 'email'];
+        $query = 'SELECT panier_produit.id, produit.nom, produit.description, produit.prix_ht FROM panier_produit INNER JOIN produit ON produit.id = panier_produit.produit_id INNER JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id';
+
+        $bind = array ( "utilisateur_id" => $_SESSION['id']);
+        $returnFields = ['id', 'nom', 'description', 'prix_ht'];
         
-        $users = $this->StructList($query, $returnFields);
-        
-        require '../views/templates/utilisateurs/index.php';
+        $produits = $this->StructList($query, $returnFields, $bind);
+
+        require '../views/templates/panier/index.php';
     }
 
     public function store(){
@@ -79,6 +81,29 @@ class panier_produit{
         $this->Add();
 
         //header('Location : http://localhost/mini-ecommerce/public/index.php?controller=produit&action=index');
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
+    }
+
+    public function destroy(){
+        if(!isset($_SESSION['id'])){
+            echo 'Vous devez être connecté pour effectuer cette action';
+            return;
+        }
+        // TODO : swith to == when admin login is added
+        if($_SESSION['role_id'] != 2){
+            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            return;
+        }
+
+        $this->Set('id', $this->get['panier_produit_id']);
+        $deleted = $this->Delete();
+
+        if(!$deleted){
+            echo 'Couldn\'t take the product off the cart';
+            return;
+        }
+
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }
