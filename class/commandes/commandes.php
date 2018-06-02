@@ -15,6 +15,30 @@ class commandes{
         $this->get = $get;
     }
 
+
+    public function index(){
+        if(!isset($_SESSION['id'])){
+            echo 'Vous devez être connecté pour effectuer cette action';
+            return;
+        }
+        // TODO : swith to == when admin login is added
+        if($_SESSION['role_id'] != 2){
+            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            return;
+        }
+        
+        $query = 'SELECT id FROM commandes WHERE utilisateur_id = :id';
+        
+        // TODO: Ajouter temps création
+        $returnFields = ['id'];
+        
+        $bind = ['id' => $_SESSION['id']];
+        
+        $commandes = $this->StructList($query, $returnFields, $bind);
+        
+        require '../views/templates/commande/index.php';
+    }
+
     public function store(){
 
         // TODO restrict the connection on the routes
@@ -41,17 +65,17 @@ class commandes{
             echo 'Vous devez être connecté pour effectuer cette action';
             return;
         }
-        // TODO : swith to == when admin login is added
+        // TODO : switch to == when admin login is added
         if($_SESSION['role_id'] != 2){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }
 
-        $this->Set('id', $this->get['panier_produit_id']);
+        $this->Set('id', $this->get['commande_id']);
         $deleted = $this->Delete();
 
         if(!$deleted){
-            echo 'Couldn\'t take the product off the cart';
+            echo 'Can\'t delete the order it has products';
             return;
         }
 
