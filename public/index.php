@@ -18,6 +18,7 @@ require('../class/utilisateurs/utilisateurs.php');
 require('../class/commande/commande.php');
 require('../class/panier/panier.php');
 require('../class/produit/produit.php');
+require('../class/panier/panier_produit.php');
 
 if(isset($_GET['controller']) && isset($_GET['action'])){
 
@@ -30,10 +31,18 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
         $u = new utilisateurs;
         $class = new $className($_POST, $_GET, $u);
         
-        $class->$functionName();
-    } else{
-        $class = new $className($_POST, $_GET);
+    }elseif($_GET['controller'] == 'panier_produit'){
+        $produit = new produit;
+        $panier = new panier;
+        $class = new $className($_POST, $_GET, $produit, $panier);
         
-        $class->$functionName();
+    }else{
+        $class = new $className($_POST, $_GET);
+          
     }
+    
+    $class->$functionName();
+
+}else{
+    require '../views/index.php';
 }

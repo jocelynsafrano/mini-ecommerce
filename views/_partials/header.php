@@ -15,7 +15,7 @@
           Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="index.php?controller=produits&amp;action=index">Produits</a>
+          <a class="dropdown-item" href="index.php?controller=produit&amp;action=index">Produits</a>
           <a class="dropdown-item" href="index.php?controller=utilisateurs&amp;action=index">Clients</a>
           <a class="dropdown-item" href="index.php?controller=commandes&amp;action=index">Commandes</a>
           <a class="dropdown-item" href="index.php?controller=panier&amp;action=index">Panier</a>

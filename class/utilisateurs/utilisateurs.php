@@ -15,7 +15,7 @@ class utilisateurs{
     public $post;
     public $get;
 
-    public function __construct($post, $get){
+    public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
     }
@@ -55,7 +55,7 @@ class utilisateurs{
         $bind = array ( "id" => $this->get["id"]);
         
         $user = $this->StructList($query, $fields, $bind);
-        
+
         $user = $user[0];
 
         require '../views/templates/utilisateurs/show.php';

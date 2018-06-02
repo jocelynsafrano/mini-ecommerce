@@ -7,27 +7,17 @@ class Auth{
     public $post;
     public $get;
 
-    public function __construct($post, $get,utilisateurs $u){
+    public function __construct($post = NULL, $get = NULL ,utilisateurs $u){
         $this->u = $u;
         $this->post = $post;
         $this->get = $get;
     }
 
     public function index(){
-        if(isset($_SESSION['id'])){
-            session_unset();
-            session_destroy();
-        }
-        
         return require '../views/templates/auth/index.php';
     }
 
     public function login(){
-        if(isset($_SESSION['id'])){
-            session_unset();
-            session_destroy();
-        }
-
         if(!isset($this->post['email'])){
             echo "Can't find any email";
             return;
@@ -61,11 +51,6 @@ class Auth{
     }
 
     public function signup(){
-        if(isset($_SESSION['id'])){
-            session_unset();
-            session_destroy();
-        }
-
         if(!isset($this->post['nom'])){
             echo "Can't find any name";
             return;
