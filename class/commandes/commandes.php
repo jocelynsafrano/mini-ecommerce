@@ -21,14 +21,13 @@ class commandes{
             echo 'Vous devez être connecté pour effectuer cette action';
             return;
         }
-        // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+
+        if($_SESSION['role_id'] == 1){
+            $query = 'SELECT id FROM commandes';
+
+        }else{
+            $query = 'SELECT id FROM commandes WHERE utilisateur_id = :id';
         }
-        
-        $query = 'SELECT id FROM commandes WHERE utilisateur_id = :id';
-        
         // TODO: Ajouter temps création
         $returnFields = ['id'];
         
@@ -65,17 +64,13 @@ class commandes{
             echo 'Vous devez être connecté pour effectuer cette action';
             return;
         }
-        // TODO : switch to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
-        }
+        // TODO : switch to == when admin login is adde
 
         $this->Set('id', $this->get['commande_id']);
         $deleted = $this->Delete();
 
         if(!$deleted){
-            echo 'Can\'t delete the order it has products';
+            echo 'Can\'t delete the order it has products you must send';
             return;
         }
 

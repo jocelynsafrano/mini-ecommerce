@@ -20,10 +20,6 @@ class produit{
             return;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
-        }
         $query = 'SELECT id, nom, description, prix_ht FROM produit';
         $returnFields = ['id', 'nom', 'description', 'prix_ht'];
         
@@ -31,5 +27,23 @@ class produit{
         
         require '../views/templates/produit/index.php';
     }
+
+    public function destroy(){
+        if(!isset($_SESSION['id'])){
+             echo 'Vous devez être connecté pour effectuer cette action';
+             return;
+         }
+         // TODO : swith to == when admin login is added
+         $this->Set('id' , $this->get['produit_id']);
+         $deleted = $this->Delete();
+         
+
+         if(!$deleted){
+            echo "Can't delete product";
+            return;
+         }
+
+         require '../views/templates/produit/index.php';
+     }
 
 }

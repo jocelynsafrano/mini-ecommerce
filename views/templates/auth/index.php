@@ -21,7 +21,8 @@
               </label>
               <input name="prenom" type="text" required autocomplete="off" />
             </div>
-        
+           
+
             <div class="field-wrap">
               <label>
                 Last Name<span class="req">*</span>
@@ -43,7 +44,11 @@
             </label>
             <input name="mdp" type="password"required autocomplete="off"/>
           </div>
-          
+          <select name="role" class="custom-select mb-4">
+              <option selected value="2">Client</option>
+              <option value="1">Admin </option>
+            </select>
+
           <button type="submit" class="button button-block"/>Get Started</button>
           
           </form>

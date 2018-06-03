@@ -26,7 +26,7 @@ class utilisateurs{
             return;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
+        if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }
@@ -44,7 +44,7 @@ class utilisateurs{
             return;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
+        if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }
@@ -59,5 +59,14 @@ class utilisateurs{
         $user = $user[0];
 
         require '../views/templates/utilisateurs/show.php';
+    }
+
+    public function search(){
+        $query = 'SELECT id, nom, prenom, email FROM utilisateurs WHERE role_id = 2';
+        $fields = ['id', 'nom', 'prenom', 'email'];
+        
+        $res = $this->StructList($query,$fields, "json" );
+        echo $res;
+        
     }
 }

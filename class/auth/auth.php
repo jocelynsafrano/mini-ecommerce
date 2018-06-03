@@ -81,6 +81,7 @@ class Auth{
         $this->u->Set('prenom', $this->post['prenom']);
         $this->u->Set('email', $this->post['email']);
         $this->u->Set('mdp', md5($this->post['mdp']));
+        $this->u->Set('role_id', $this->post['role']);
 
         $this->u->Add();
 

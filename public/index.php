@@ -44,8 +44,14 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
     }else{
         $class = new $className($_POST, $_GET);
     }
-    
-    $class->$functionName();
+    if(method_exists($class, $functionName)){
+        $class->$functionName();
+    }else{
+        echo 'method does not exist';
+        return;
+
+        //TODO add redirection after login
+    }
 
 }else{
     require '../views/index.php';
