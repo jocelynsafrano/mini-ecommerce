@@ -3,7 +3,10 @@
 <?php ob_start(); ?>
 <div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
-
+  <?php if($_SESSION['role_id'] == 1):?>
+  <a class="btn btn-primary m-4" href="index.php?controller=produit&amp;action=create" role="button">Créer un produit</a>
+<?php endif; ?>
+  
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -24,9 +27,14 @@
         <td><?= $produit['nom'] ?></td>
         <td><?= $produit['description'] ?></td>
         <td><?= $produit['prix_ht'] ?></td>
-        <td><a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
+        <td>
+<?php if($_SESSION['role_id'] == 2):?>
+        <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
+<?php elseif($_SESSION['role_id'] == 1):?>
+        <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer le produit</a>
+<?php endif;?>
         </td>
-        
+      <!-- TODO : Think of restricting access to peopl who try to inject wrong values to the website -->
       </tr>
   <?php 
   $i++;

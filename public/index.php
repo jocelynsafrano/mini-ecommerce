@@ -25,7 +25,6 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
 
     $className = $_GET['controller'];
 
-
     $functionName = $_GET['action'];
 
     if($_GET['controller'] == 'auth'){

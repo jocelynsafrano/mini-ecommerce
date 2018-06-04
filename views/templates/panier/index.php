@@ -3,7 +3,7 @@
 <?php ob_start(); ?>
 <div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
-
+  <a class="btn btn-primary" href="index.php?controller=produit&action=create" role="button">Créer un produit</a>
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -19,7 +19,7 @@
   $i = 0;
   foreach($produits as $produit):?>
       <tr>
-      
+      <!--// TODO : take the content of this file to show.php and use this file to display the list of carts-->
         <th scope="row"><?= $i ?></td>
         <td><?= $produit['nom'] ?></td>
         <td><?= $produit['description'] ?></td>
