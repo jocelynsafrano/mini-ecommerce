@@ -70,8 +70,6 @@ class produit{
         $bind = ['id' => $this->get['produit_id']];
         $deleted = $this->Sql($req, $bind);
 
-        var_dump($deleted);
-
         $this->index();
     }
 
