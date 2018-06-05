@@ -31,16 +31,8 @@ class utilisateur{
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }
-<<<<<<< Updated upstream:class/utilisateur/utilisateur.php
         $query = 'SELECT id, nom, prenom, email, date_creation, date_modification FROM utilisateur';
         $returnFields = ['id', 'nom', 'prenom', 'email', 'date_creation', 'date_modification'];
-=======
-
-        //$query = 'SELECT id, nom, prenom, email FROM utilisateurs WHERE role_id = 2';
-        $query = 'SELECT id, nom, prenom, email FROM utilisateurs';
-        
-        $returnFields = ['id', 'nom', 'prenom', 'email'];
->>>>>>> Stashed changes:class/utilisateurs/utilisateurs.php
         
         $users = $this->StructList($query, $returnFields);
         
@@ -58,15 +50,14 @@ class utilisateur{
         }
         
 
-        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id, date_creation, date_modification FROM utilisateurs WHERE role_id = 2 and id = :id';
+        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id, date_creation, date_modification FROM utilisateur WHERE role_id = 2 and id = :id';
         $fields = ['id', 'nom', 'prenom', 'email', "cp", "ville_id", "telephone", "role_id", "date_creation", "date_modification" ];
         $bind = array ( "id" => $this->get["id"]);
         
         $user = $this->StructList($query, $fields, $bind);
 
         $user = $user[0];
-
-        require '../views/templates/utilisateurs/show.php';
+        require '../views/templates/utilisateur/show.php';
     }
 
     public function search(){

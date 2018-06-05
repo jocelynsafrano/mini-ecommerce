@@ -7,7 +7,7 @@ class commande{
     public $utilisateur_id;
     public $post;
     public $get;
-    public $date_creation;
+    public $date_creation = 0;
     
     // Add inheritance for the post and the get requests variables
     
@@ -24,7 +24,7 @@ class commande{
         }
 
         if($_SESSION['role_id'] == 1){
-            $query = 'SELECT id FROM commande';
+            $query = 'SELECT id, date_creation FROM commande';
 
         }else{
             $query = 'SELECT id, date_creation FROM commande WHERE utilisateur_id = :id';
@@ -32,7 +32,9 @@ class commande{
         // TODO: Ajouter temps création
         $returnFields = ['id', 'date_creation'];
         
-        $bind = ['id' => $_SESSION['id']];
+        $bind = [
+            'id' => $_SESSION['id']
+        ];
         
         $commandes = $this->StructList($query, $returnFields, $bind);
         
