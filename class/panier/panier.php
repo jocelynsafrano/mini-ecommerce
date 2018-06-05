@@ -5,6 +5,7 @@ class panier{
     
     public $id;
     public $utilisateur_id;
+    public $date_creation;
 
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;

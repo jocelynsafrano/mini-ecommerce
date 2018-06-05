@@ -7,6 +7,7 @@ class commande{
     public $utilisateur_id;
     public $post;
     public $get;
+    public $date_creation;
     
     // Add inheritance for the post and the get requests variables
     
@@ -26,10 +27,10 @@ class commande{
             $query = 'SELECT id FROM commande';
 
         }else{
-            $query = 'SELECT id FROM commande WHERE utilisateur_id = :id';
+            $query = 'SELECT id, date_creation FROM commande WHERE utilisateur_id = :id';
         }
         // TODO: Ajouter temps création
-        $returnFields = ['id'];
+        $returnFields = ['id', 'date_creation'];
         
         $bind = ['id' => $_SESSION['id']];
         

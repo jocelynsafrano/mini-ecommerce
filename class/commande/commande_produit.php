@@ -12,7 +12,7 @@ class commande_produit{
     
     // Add inheritance for the post and the get requests variables
     
-    public function __construct($post = NULL, $get = NULL, commandes $c){
+    public function __construct($post = NULL, $get = NULL, commande $c){
         $this->post = $post;
         $this->get = $get;
         $this->commande = $c;
