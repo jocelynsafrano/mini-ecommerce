@@ -11,36 +11,38 @@
         <th scope="col">Nom</th>
         <th scope="col">Description</th>
         <th scope="col">Prix HT</th>
-        <th scope="col">Actions</th>
+        <th scope="col">Date de création</th>
+        <th scope="col">Date de modification</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
-  <?php 
-  $i = 0;
-  foreach($produits as $produit):?>
-      <tr>
-      
-        <th scope="row"><?= $produit['id'] ?></td>
-        <td><?= $produit['nom'] ?></td>
-        <td><?= $produit['description'] ?></td>
-        <td><?= $produit['prix_ht'] ?></td>
-        <td>
-        <?php if($_SESSION['role_id'] == 1): ?>
+      <?php 
+      $i = 0;
+      foreach($produits as $produit):?>
+          <tr>
+          
+            <th scope="row"><?= $produit['id'] ?></td>
+            <td><?= $produit['nom'] ?></td>
+            <td><?= $produit['description'] ?></td>
+            <td><?= $produit['prix_ht'] ?></td>
+            <td><?= $produit['date_creation'] ?></td>
+            <td><?= $produit['date_modification'] ?></td>
 
-        <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer produit</a>
-        
-<?php else:  ?>
-<a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
-        
-        <?php endif;  ?>
-        
-        </td>
+            <td>
+            <?php if($_SESSION['role_id'] == 1): ?>
 
-        
-      </tr>
-  <?php 
-  $i++;
-  endforeach;?>
+            <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer produit</a>
+            
+            <?php else:  ?>
+            <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
+            
+            <?php endif;  ?>
+            </td>
+          </tr>
+      <?php 
+      $i++;
+      endforeach;?>
     </tbody>
   </table>
 </div>  

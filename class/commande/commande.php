@@ -1,6 +1,6 @@
 <?php
 
-class commandes{
+class commande{
     use Genos;
     
     public $id;
@@ -23,10 +23,10 @@ class commandes{
         }
 
         if($_SESSION['role_id'] == 1){
-            $query = 'SELECT id FROM commandes';
+            $query = 'SELECT id FROM commande';
 
         }else{
-            $query = 'SELECT id FROM commandes WHERE utilisateur_id = :id';
+            $query = 'SELECT id FROM commande WHERE utilisateur_id = :id';
         }
         // TODO: Ajouter temps création
         $returnFields = ['id'];

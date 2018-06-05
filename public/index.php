@@ -14,9 +14,9 @@ Ces vues sont générés en utilisant le templating qui est expliqué dans le fi
 // On requiert les /frameworks et les ficiers de configuration
 require('../config.php');
 require('../class/auth/auth.php');
-require('../class/utilisateurs/utilisateurs.php');
-require('../class/commandes/commandes.php');
-require('../class/commandes/commande_produit.php');
+require('../class/utilisateur/utilisateur.php');
+require('../class/commande/commande.php');
+require('../class/commande/commande_produit.php');
 require('../class/panier/panier.php');
 require('../class/produit/produit.php');
 require('../class/panier/panier_produit.php');
@@ -29,7 +29,7 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
     $functionName = $_GET['action'];
 
     if($_GET['controller'] == 'auth'){
-        $u = new utilisateurs;
+        $u = new utilisateur;
         $class = new $className($_POST, $_GET, $u);
         
     }elseif($_GET['controller'] == 'panier_produit'){
@@ -38,7 +38,7 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
         $class = new $className($_POST, $_GET, $produit, $panier);
         
     }elseif($_GET['controller'] == 'commande_produit'){
-        $commande = new commandes;
+        $commande = new commande;
         $class = new $className($_POST, $_GET, $commande);
         
     }else{

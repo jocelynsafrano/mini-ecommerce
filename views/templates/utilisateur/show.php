@@ -11,6 +11,8 @@
     <p class="lead">Telephone : <?= $user['telephone']?></p>
     <p class="lead">email : <?= $user['email']?></p>
     <p class="lead">Role Id : <?= $user['role_id']?></p>
+    <p class="lead"> : Date creation : <?= $user['date_creation']?></p>
+    <p class="lead"> : Date modification : <?= $user['date_modification']?></p>
 
 <?php $content = ob_get_clean(); ?>
 

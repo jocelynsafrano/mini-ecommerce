@@ -1,4 +1,4 @@
-<?php $title = 'Panier'?>
+<?php $title = 'Liste des produits d\'un panier';?>
 
 <?php ob_start(); ?>
 <div class="container pt-4">
@@ -9,22 +9,22 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nom</th>
-        <th scope="col">Description</th>
-        <th scope="col">Prix HT</th>
-        <th scope="col">Actions</th>
+        <th scope="col">Prenom</th>
+        <th scope="col">Email</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
   <?php 
   $i = 0;
-  foreach($produits as $produit):?>
+  foreach($paniers as $panier):?>
       <tr>
       
         <th scope="row"><?= $i ?></td>
-        <td><?= $produit['nom'] ?></td>
-        <td><?= $produit['description'] ?></td>
-        <td><?= $produit['prix_ht'] ?></td>
-        <td><a href="index.php?controller=panier_produit&amp;action=destroy&amp;panier_produit_id=<?= $produit['id'] ?>">Retirer du panier</a>
+        <td><?= $panier['nom'] ?></td>
+        <td><?= $panier['prenom'] ?></td>
+        <td><?= $panier['email'] ?></td>
+        <td><a href="index.php?controller=panier_produit&amp;action=index&amp;utilisateur_id=<?= $produit['id'] ?>">Retirer du panier</a>
         </td>
         
       </tr>
