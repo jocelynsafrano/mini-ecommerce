@@ -9,6 +9,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">ID commande</th>
+        <th scop="col">Date création</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
@@ -20,6 +21,7 @@
       
       <th scope="row"><?= $i ?></td>
       <th><?= $commande['id'] ?></td>
+      <th><?= $commande['date_creation'] ?></td>
       <td><a href="index.php?controller=commandes&amp;action=destroy&amp;commande_id=<?= $commande['id'] ?>">Annuler la commande</a>
       <a href="index.php?controller=commande_produit&amp;action=show&amp;commande_id=<?= $commande['id'] ?>">Voir ligne de commande</a></td>
         

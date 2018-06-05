@@ -1,6 +1,6 @@
 <?php
 
-class utilisateurs{
+class utilisateur{
     use Genos;
     
     public $id;
@@ -12,6 +12,8 @@ class utilisateurs{
     public $cp = '0000';
     public $ville_id = 0;
     public $role_id = 2;
+    public $date_creation;
+    public $date_modification = 0;
     public $post;
     public $get;
 
@@ -30,12 +32,12 @@ class utilisateurs{
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }
-        $query = 'SELECT id, nom, prenom, email FROM utilisateurs WHERE role_id = 2';
-        $returnFields = ['id', 'nom', 'prenom', 'email'];
+        $query = 'SELECT id, nom, prenom, email, date_creation, date_modification FROM utilisateur';
+        $returnFields = ['id', 'nom', 'prenom', 'email', 'date_creation', 'date_modification'];
         
         $users = $this->StructList($query, $returnFields);
         
-        require '../views/templates/utilisateurs/index.php';
+        require '../views/templates/utilisateur/index.php';
     }
 
     public function show(){
@@ -50,8 +52,8 @@ class utilisateurs{
         }
         
 
-        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id FROM utilisateurs WHERE role_id = 2 and id = :id';
-        $fields = ['id', 'nom', 'prenom', 'email', "cp", "ville_id", "telephone", "role_id" ];
+        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id, date_creation, date_modification FROM utilisateurs WHERE role_id = 2 and id = :id';
+        $fields = ['id', 'nom', 'prenom', 'email', "cp", "ville_id", "telephone", "role_id", "date_creation", "date_modification" ];
         $bind = array ( "id" => $this->get["id"]);
         
         $user = $this->StructList($query, $fields, $bind);

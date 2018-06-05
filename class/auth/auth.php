@@ -7,7 +7,7 @@ class Auth{
     public $post;
     public $get;
 
-    public function __construct($post = NULL, $get = NULL ,utilisateurs $u){
+    public function __construct($post = NULL, $get = NULL ,utilisateur $u){
         $this->u = $u;
         $this->post = $post;
         $this->get = $get;

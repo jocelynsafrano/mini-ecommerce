@@ -8,6 +8,8 @@ class produit{
     public $description;
     public $utilisateur_id;
     public $prix_ht = '0000000000';
+    public $date_creation;
+    public $date_modification;
 
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
@@ -20,8 +22,8 @@ class produit{
             return;
         }
         // TODO : swith to == when admin login is added
-        $query = 'SELECT id, nom, description, prix_ht FROM produit';
-        $returnFields = ['id', 'nom', 'description', 'prix_ht'];
+        $query = 'SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit';
+        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
         
         $produits = $this->StructList($query, $returnFields);
         

@@ -18,15 +18,15 @@ class panier{
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            echo 'Vous n\'êtes pas autorisé visualiser la liste des produits d\un panier en tant qu\'Admin';
             return;
         }
 
         // TODO select all the products in the cart
-        $query = 'SELECT id, nom, description, email FROM utilisateurs WHERE role_id = 2';
+        $query = 'SELECT p.id, u.nom, u.prenom, u.email FROM panier AS p INNER JOIN utilisateur AS u ON p.utilisateur_id=u.id';
         $returnFields = ['id', 'nom', 'prenom', 'email'];
         
-        $users = $this->StructList($query, $returnFields);
+        $paniers = $this->StructList($query, $returnFields);
         
         require '../views/templates/panier/index.php';
     }
