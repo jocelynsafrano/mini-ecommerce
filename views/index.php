@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $title ?? 'Home page' ?></title>
+    <title><?php if(isset($title)){echo $title;}else{echo 'Home page';} ?></title>
     <?php include '../views/_partials/scripts_top.php';?>
     <?php include '../views/_partials/stylesheets.php';?>
 </head>
@@ -12,7 +12,7 @@
 
     <?php include '../views/_partials/header.php';?>
 
-    <?= $content ?? ''?>
+    <?php if(isset($content)){echo $content;}else{echo 'Home page';} ?>
 
     <?php include '../views/_partials/scripts_bottom.php';?>
 </body>
