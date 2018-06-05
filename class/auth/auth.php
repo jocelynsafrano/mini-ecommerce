@@ -7,7 +7,7 @@ class Auth{
     public $post;
     public $get;
 
-    public function __construct($post = NULL, $get = NULL ,utilisateurs $u){
+    public function __construct($post = NULL, $get = NULL ,utilisateur $u){
         $this->u = $u;
         $this->post = $post;
         $this->get = $get;
@@ -81,6 +81,7 @@ class Auth{
         $this->u->Set('prenom', $this->post['prenom']);
         $this->u->Set('email', $this->post['email']);
         $this->u->Set('mdp', md5($this->post['mdp']));
+        $this->u->Set('role_id', $this->post['role']);
 
         $this->u->Add();
 

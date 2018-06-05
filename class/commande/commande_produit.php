@@ -12,7 +12,7 @@ class commande_produit{
     
     // Add inheritance for the post and the get requests variables
     
-    public function __construct($post = NULL, $get = NULL, commandes $c){
+    public function __construct($post = NULL, $get = NULL, commande $c){
         $this->post = $post;
         $this->get = $get;
         $this->commande = $c;
@@ -30,10 +30,6 @@ class commande_produit{
             return;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
-        }
 
         // Vérifier si le panier n'est pas vide question de ne pas créer des commandes vides
 
@@ -82,6 +78,26 @@ class commande_produit{
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
         
+    }
+
+    public function show(){
+        if(!isset($_SESSION['id'])){
+            echo 'Vous devez être connecté pour effectuer cette action';
+            return;
+        }
+        // TODO : swith to == when admin login is added
+       
+        $req = "SELECT commande_produit.id, `commande_id`, `produit_id`, produit.nom nom_produit, produit.description description_produit , prix_ht FROM `commande_produit` INNER JOIN produit ON produit.id = commande_produit.produit_id WHERE commande_produit.commande_id = :commande_id";
+        
+        $bind = array(
+            "commande_id" => $this->get['commande_id']
+        );
+
+        $produits = $this->Sql($req, 'commande_id','nom_produit', 'description_produit', 'prix_ht', $bind);
+        
+        require '../views/templates/commande/show.php';
+        // TODO : add total in cart
+
     }
 
     public function destroy(){

@@ -1,1 +1,1 @@
-// Generate home page
+Go to /public

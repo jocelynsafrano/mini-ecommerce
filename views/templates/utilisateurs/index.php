@@ -13,16 +13,19 @@
         <th scope="col">Actions</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="index-results">
   <?php 
   $i = 0;
   foreach($users as $user):?>
-      <tr>
+      <tr class="row-<?= $i ?>">
       
-        <th scope="row"><?= $user['id'] ?></td>
-        <td><?= $user['nom'] ?></td>
-        <td><?= $user['prenom'] ?></td>
-        <td><a href="index.php?controller=utilisateurs&amp;action=show&amp;id=<?= $user['id'] ?>">Voir</a>
+        <th scope="row" class="id"><?= $user['id'] ?></td>
+        <td class="nom"><?= $user['nom'] ?></td>
+        <td class="prenom"><?= $user['prenom'] ?></td>
+        <td class="actions">
+        <a href="index.php?controller=utilisateur&amp;action=show&amp;id=<?= $user['id'] ?>">Voir</a>
+        <a href="index.php?controller=utilisateur&amp;action=edit&amp;id=<?= $user['id'] ?>">Editer</a>
+        <a href="index.php?controller=utilisateur&amp;action=destroy&amp;utilisateur_id=<?= $user['id'] ?>">Supprimer</a>
         </td>
         
       </tr>

@@ -27,19 +27,27 @@ class panier_produit{
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            echo 'Vous n\'êtes pas autorisé visualiser les produits d\'un panier en tant qu\'Admin';
             return;
         }
 
         // TODO select all the products in the cart
         $query = 'SELECT panier_produit.id, produit.nom, produit.description, produit.prix_ht FROM panier_produit INNER JOIN produit ON produit.id = panier_produit.produit_id INNER JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id';
 
-        $bind = array ( "utilisateur_id" => $_SESSION['id']);
+        if($_SESSION['role_id'] == 1){
+            $utilisateur_id = $this->get['utilisateur_id'];
+        }
+
+        if($_SESSION['role_id'] == 2){
+            $utilisateur_id = $_SESSION['id'];
+        }
+
+        $bind = array ( "utilisateur_id" => $utilisateur_id);
         $returnFields = ['id', 'nom', 'description', 'prix_ht'];
         
         $produits = $this->StructList($query, $returnFields, $bind);
 
-        require '../views/templates/panier/index.php';
+        require '../views/templates/panier/show.php';
     }
 
     public function store(){
@@ -51,7 +59,7 @@ class panier_produit{
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            echo 'Vous n\'êtes pas autorisé composer un panier';
             return;
         }
 

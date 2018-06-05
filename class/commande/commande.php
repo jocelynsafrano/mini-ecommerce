@@ -1,12 +1,13 @@
 <?php
 
-class commandes{
+class commande{
     use Genos;
     
     public $id;
     public $utilisateur_id;
     public $post;
     public $get;
+    public $date_creation;
     
     // Add inheritance for the post and the get requests variables
     
@@ -21,16 +22,15 @@ class commandes{
             echo 'Vous devez être connecté pour effectuer cette action';
             return;
         }
-        // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+
+        if($_SESSION['role_id'] == 1){
+            $query = 'SELECT id FROM commande';
+
+        }else{
+            $query = 'SELECT id, date_creation FROM commande WHERE utilisateur_id = :id';
         }
-        
-        $query = 'SELECT id FROM commandes WHERE utilisateur_id = :id';
-        
         // TODO: Ajouter temps création
-        $returnFields = ['id'];
+        $returnFields = ['id', 'date_creation'];
         
         $bind = ['id' => $_SESSION['id']];
         
@@ -65,17 +65,13 @@ class commandes{
             echo 'Vous devez être connecté pour effectuer cette action';
             return;
         }
-        // TODO : switch to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
-        }
+        // TODO : switch to == when admin login is adde
 
         $this->Set('id', $this->get['commande_id']);
         $deleted = $this->Delete();
 
         if(!$deleted){
-            echo 'Can\'t delete the order it has products';
+            echo 'Can\'t delete the order it has products you must send';
             return;
         }
 
