@@ -27,6 +27,30 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
 
     $functionName = $_GET['action'];
 
+    if(!class_exists($className)){
+        $auth = new Auth();
+
+        $auth->index(
+            $messages = [
+                'body' => '404 error',
+                'type' => 'danger'
+            ]
+        );
+        exit;
+    }
+
+    if(!method_exists($className, $functionName)){
+        $auth = new Auth();
+
+        $auth->index(
+            $messages = [
+                'body' => '404 error',
+                'type' => 'danger'
+            ]
+        );
+        exit;
+        //TODO add redirection after login
+    }
     if($_GET['controller'] == 'auth'){
         $u = new utilisateur;
         $class = new $className($_POST, $_GET, $u);
@@ -43,15 +67,8 @@ if(isset($_GET['controller']) && isset($_GET['action'])){
     }else{
         $class = new $className($_POST, $_GET);
     }
-    if(method_exists($class, $functionName)){
-        $class->$functionName();
-    }else{
-        echo 'method does not exist';
-        return;
-
-        //TODO add redirection after login
-    }
-
+    
+    $class->$functionName();
 }else{
     require '../views/index.php';
 }

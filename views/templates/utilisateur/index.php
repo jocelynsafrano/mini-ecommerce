@@ -28,7 +28,15 @@
             <td class="email"><?= $user['email'] ?></td>
             <td class="date_creation"><?= $user['date_creation'] ?></td>
             <td class="date_modif"><?= $user['date_modification'] ?></td>
-            <td class="actions"><a href="index.php?controller=utilisateur&amp;action=show&amp;id=<?= $user['id'] ?>">Voir</a>
+            <td class="actions">
+            <a href="index.php?controller=utilisateur&amp;action=show&amp;id=<?= $user['id'] ?>">Voir</a>
+            
+            <?php if($_SESSION['role_id'] == 1):?>
+            
+            <a href="index.php?controller=utilisateur&amp;action=destroy&amp;id=<?= $user['id'] ?>">Supprimer</a>
+            
+            <?php endif;  ?>
+            
             </td>
             
           </tr>

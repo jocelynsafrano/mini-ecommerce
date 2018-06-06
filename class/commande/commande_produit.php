@@ -26,10 +26,12 @@ class commande_produit{
 
         // TODO restrict the connection on the routes
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
-        // TODO : swith to == when admin login is added
 
         // Vérifier si le panier n'est pas vide question de ne pas créer des commandes vides
 
@@ -41,10 +43,16 @@ class commande_produit{
 
         $fields = ['COUNT(*)'];
         $result = $this->Sql($req, "COUNT(*)", $bind);
-        
+
         if(intval($result[0]["COUNT(*)"]) <= 0){
-            echo "Votre panier est vide ! Vous ne pouvez pas valider une commande";
-            return;
+            $messages = [
+                'body' => "Votre panier est vide ! Vous ne pouvez pas valider une commande !",
+                'type' => "danger"
+            ];
+            // TODO : Verifier cette ligne
+            var_dump($_SERVER['HTTP_REFERER']);
+            header('Location : ' . $_SERVER['HTTP_REFERER']);
+            //exit;
         }
         
         // Créer la commande
@@ -75,15 +83,22 @@ class commande_produit{
 
         $this->Sql($req, $bind);
         
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $messages = [
+            'body' => "Votre panier a été validé",
+            'type' => "danger"
+        ];
+
+        header('Location : ' . $_SERVER['HTTP_REFERER']);
         exit;
-        
     }
 
     public function show(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
        
@@ -102,13 +117,16 @@ class commande_produit{
 
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
         }
 
         $this->Set('id', $this->get['panier_produit_id']);

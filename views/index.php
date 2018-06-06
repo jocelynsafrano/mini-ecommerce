@@ -9,8 +9,13 @@
     <?php include '../views/_partials/stylesheets.php';?>
 </head>
 <body>
-
+    
     <?php include '../views/_partials/header.php';?>
+
+    <div class="container mt-4">
+        <?php include '../views/_partials/messages.php';?>
+    </div>
+
 <?php if(isset($content)){echo $content;}else{ echo 'Bienvenue';} ?>
 
     <?php include '../views/_partials/scripts_bottom.php';?>

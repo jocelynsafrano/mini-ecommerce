@@ -7,33 +7,52 @@ class Auth{
     public $post;
     public $get;
 
-    public function __construct($post = NULL, $get = NULL ,utilisateur $u){
+    public function __construct($post = NULL, $get = NULL ,utilisateur $u = NULL){
         $this->u = $u;
         $this->post = $post;
         $this->get = $get;
     }
 
-    public function index(){
+    public function index(array $messages = NULL){
         return require '../views/templates/auth/index.php';
     }
 
     public function login(){
-        if(!isset($this->post['email'])){
-            echo "Can't find any email";
-            return;
+        if(!isset($this->post['email']) || empty($this->post['email'])){
+            $messages = [
+                'body' => "Can't find any email",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
+
+        if(!isset($this->post['mdp']) || empty($this->post['mdp'])){
+            $messages = [
+                'body' => "Can't find any password",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
+        }
+
+
         $search = array();
         $search['email'] = $this->post['email'];
         $result = $this->u->Find($search);
         
         if(empty($result)){
-            echo "Can't find this email";
-            return;
+            $messages = [
+                'body' => "Can't find an account associated to this email",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
 
         if($result[0]['mdp'] != md5($this->post['mdp'])){
-            echo "Wrong password";
-            return;
+            $messages = [
+                'body' => "Wrong Password",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
 
         $this->u->Set('id', $result[0]['id']);
@@ -47,25 +66,41 @@ class Auth{
         $_SESSION['ville_id'] = $this->u->ville_id;
         $_SESSION['role_id'] = $this->u->role_id;
         
-        require '../views/index.php';
+        $messages = [
+            'body' => "Vous êtes connecté ! Bienvenue !",
+            'type' => "primary"
+        ];
+        return require '../views/index.php';
     }
 
     public function signup(){
-        if(!isset($this->post['nom'])){
-            echo "Can't find any name";
-            return;
+        if(!isset($this->post['nom']) || empty($this->post['nom'])){
+            $messages = [
+                'body' => "Please specify a name",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
-        if(!isset($this->post['prenom'])){
-            echo "Can't find any first name";
-            return;
+        if(!isset($this->post['prenom']) || empty($this->post['prenom'])){
+            $messages = [
+                'body' => "Please specify a first name",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
-        if(!isset($this->post['email'])){
-            echo "Can't find any email";
-            return;
+        if(!isset($this->post['email']) || empty($this->post['email'])){
+            $messages = [
+                'body' => "Please specify an email",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
-        if(!isset($this->post['mdp'])){
-            echo "Can't find any password";
-            return;
+        if(!isset($this->post['mdp']) || empty($this->post['mdp'])){
+            $messages = [
+                'body' => "Please specify a password",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
 
         $search = array();
@@ -73,8 +108,11 @@ class Auth{
         $result = $this->u->Find($search);
 
         if($result){
-            echo "This account already exists you must login";
-            return;
+            $messages = [
+                'body' => "This account already exists you must login",
+                'type' => "danger"
+            ];
+            return $this->index($messages);
         }
 
         $this->u->Set('nom', $this->post['nom']);
@@ -91,8 +129,11 @@ class Auth{
     public function logout(){
         session_unset();
         session_destroy();
-        
-        $this->index();
+        $messages = [
+            'body' => "Vou êtes déconnecté !",
+            'type' => "success"
+        ];
+        $this->index($messages);
 
     }
 }

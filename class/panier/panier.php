@@ -10,12 +10,16 @@ class panier{
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
+        $this->date_creation = date('Y-m-d');
     }
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
@@ -34,8 +38,11 @@ class panier{
 
     public function create(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
@@ -44,7 +51,7 @@ class panier{
         }
         
 
-        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id FROM utilisateurs WHERE role_id = 2 and id = :id';
+        $query = 'SELECT id, nom, prenom, email, cp, ville_id , telephone, role_id FROM utilisateur WHERE role_id = 2 and id = :id';
         $fields = ['id', 'nom', 'prenom', 'email', "cp", "ville_id", "telephone", "role_id" ];
         $bind = array ( "id" => $this->get["id"]);
         
@@ -52,6 +59,6 @@ class panier{
 
         $user = $user[0];
 
-        require '../views/templates/utilisateurs/show.php';
+        require '../views/templates/utilisateur/show.php';
     }
 }

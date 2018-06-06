@@ -19,7 +19,7 @@
               <label>
                 First Name<span class="req">*</span>
               </label>
-              <input name="prenom" type="text" required autocomplete="off" />
+              <input name="prenom" type="text"  autocomplete="off" />
             </div>
            
 
@@ -27,7 +27,7 @@
               <label>
                 Last Name<span class="req">*</span>
               </label>
-              <input name="nom" type="text"required autocomplete="off"/>
+              <input name="nom" type="text" autocomplete="off"/>
             </div>
           </div>
 
@@ -35,14 +35,14 @@
             <label>
               Email Address<span class="req">*</span>
             </label>
-            <input name="email" type="email"required autocomplete="off"/>
+            <input name="email" type="email"autocomplete="off"/>
           </div>
           
           <div class="field-wrap">
             <label>
               Set A Password<span class="req">*</span>
             </label>
-            <input name="mdp" type="password"required autocomplete="off"/>
+            <input name="mdp" type="password" autocomplete="off"/>
           </div>
           <select name="role" class="custom-select mb-4">
               <option selected value="2">Client</option>
@@ -64,14 +64,14 @@
             <label>
               Email Address<span class="req">*</span>
             </label>
-            <input name="email" type="email"required autocomplete="off"/>
+            <input name="email" type="email" autocomplete="off"/>
           </div>
           
           <div class="field-wrap">
             <label>
               Password<span class="req">*</span>
             </label>
-            <input name="mdp" type="password"required autocomplete="off"/>
+            <input name="mdp" type="password" autocomplete="off"/>
           </div>
           
           <p class="forgot"><a href="#">Forgot Password?</a></p>

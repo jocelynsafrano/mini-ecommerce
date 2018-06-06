@@ -22,8 +22,11 @@ class panier_produit{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
@@ -54,8 +57,11 @@ class panier_produit{
 
         // TODO restrict the connection on the routes
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
@@ -87,20 +93,27 @@ class panier_produit{
         
         // add the product id and the cart id the this class's table
         $this->Add();
+        //header('Location: ' . $_SERVER['HTTP_REFERER']);
+        //exit;
 
-        //header('Location : http://localhost/mini-ecommerce/public/index.php?controller=produit&action=index');
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit;
+        $messages = [
+            'body' => "Votre produit a été ajouté au panier",
+            'type' => "danger"
+        ];
+        $this->produit->index($messages);
     }
 
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
-        // TODO : swith to == when admin login is added
+
         if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
+            echo 'Vous n\'êtes pas autorisé de supprmer le panier';
             return;
         }
 

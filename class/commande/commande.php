@@ -7,20 +7,25 @@ class commande{
     public $utilisateur_id;
     public $post;
     public $get;
-    public $date_creation = 0;
+    public $date_creation;
     
     // Add inheritance for the post and the get requests variables
     
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
+        $this->date_creation = date('Y-m-d');
+        
     }
 
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
 
         if($_SESSION['role_id'] == 1){
@@ -45,15 +50,21 @@ class commande{
 
         // TODO restrict the connection on the routes
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
-        }
-        // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
 
+        if($_SESSION['role_id'] != 2){
+            $messages = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des clients",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
+        }
+        
         $this->Set('utilisateur_id' , $_SESSION['id']);
         
         // add the product id and the cart id the this class's table
@@ -64,8 +75,11 @@ class commande{
 
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+            $messages = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+            return require '../views/templates/auth/index.php';
         }
         // TODO : switch to == when admin login is adde
 
