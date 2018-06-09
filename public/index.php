@@ -20,6 +20,7 @@ require('../class/commande/commande_produit.php');
 require('../class/panier/panier.php');
 require('../class/produit/produit.php');
 require('../class/panier/panier_produit.php');
+require('../class/categorie/categorie.php');
 
 if(isset($_GET['controller']) && isset($_GET['action'])){
 
