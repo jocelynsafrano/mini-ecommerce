@@ -31,14 +31,9 @@ class produit{
             return require '../views/templates/auth/index.php';
         }
         // TODO : swith to == when admin login is added
-<<<<<<< HEAD
-        $query = 'SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0';
-        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
-=======
         $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit
          AS p INNER JOIN categorie_produit AS cp ON p.id = cp.id_produit INNER JOIN categorie AS c ON cp.id_categorie = c.id';
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
->>>>>>> editCategorie
         
         $produits = $this->StructList($query, $returnFields);
         
