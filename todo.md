@@ -11,6 +11,8 @@ Gestion des catégories (ajouter - editer - suprimer - lister) par jocelyn
 
 Gesion produits (editer un produit )
 
-Gestion des messages
+Gestion des messages par session
 
-barre de recherche dynamique
+add confirmation delete alerts using javascript on all delete buttons
+
+barre de recherche

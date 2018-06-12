@@ -23,11 +23,19 @@ class produit{
 
     public function index($messages = NULL){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
         $query = 'SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0';
@@ -42,14 +50,52 @@ class produit{
         return require '../views/templates/produit/create.php';
     }
 
-
-    public function store(){
+    public function search(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
+        
+        if(empty($this->post['nom_produit'])){
+            return $this->index();
+        }
+
+        $query = "SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0 AND nom LIKE :nom";
+        
+        $bind = ['nom' => '%' . $this->post['nom_produit'] . '%'];
+
+        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
+        
+        $produits = $this->StructList($query, $returnFields, $bind);
+        require '../views/templates/produit/index.php';
+    }
+
+    public function store(){
+        if(!isset($_SESSION['id'])){
+
+            $_SESSION['messages'] = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if(!isset($this->post['nom']) || empty($this->post['nom'])){
@@ -77,12 +123,20 @@ class produit{
     }
 
     public function edit(){
-       if(!isset($_SESSION['id'])){
-            $messages = [
+        if(!isset($_SESSION['id'])){
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($_SESSION['role_id'] != 1){
@@ -110,11 +164,19 @@ class produit{
     public function update(){
 
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if(!isset($this->post['nom']) || empty($this->post['nom'])){
@@ -156,12 +218,20 @@ class produit{
     }
 
     public function destroy(){
-       if(!isset($_SESSION['id'])){
-            $messages = [
+        if(!isset($_SESSION['id'])){
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         
         if(!isset($this->get['produit_id']) || empty($this->get['produit_id'])){

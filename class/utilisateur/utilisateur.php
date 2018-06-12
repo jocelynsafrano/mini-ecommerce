@@ -27,13 +27,20 @@ class utilisateur{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
@@ -49,13 +56,20 @@ class utilisateur{
 
     public function show(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
@@ -72,22 +86,21 @@ class utilisateur{
         require '../views/templates/utilisateur/show.php';
     }
 
-    public function search(){
-        $query = 'SELECT id, nom, prenom, email FROM  WHERE role_id = 2';
-        $fields = ['id', 'nom', 'prenom', 'email'];
-        
-        $res = $this->StructList($query,$fields, "json" );
-        echo $res;
-        
-    }
-
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if(!isset($this->get['id']) || empty($this->get['id'])){
@@ -109,11 +122,19 @@ class utilisateur{
     public function edit(){
 
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($_SESSION['role_id'] != 1){
@@ -142,13 +163,20 @@ class utilisateur{
     public function update(){
 
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if(!isset($this->post['nom']) || empty($this->post['nom'])){
             $message = "Aucun nom n'est attribué";
             $this->index();

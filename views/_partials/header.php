@@ -24,12 +24,6 @@
     </ul>
       
       <?php endif; ?>
- 
-    <form class="form-inline ml-auto ">
-      <input class="form-control mr-sm-2" type="search" id="search" onkeyup="filterSearch(this.value)" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <div id="demo"></div>
     <ul class="navbar-nav ml-auto">
     
     <?php if(isset($_SESSION['id'])) :?>

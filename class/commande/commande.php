@@ -21,11 +21,19 @@ class commande{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($_SESSION['role_id'] == 1){
@@ -50,11 +58,19 @@ class commande{
 
         // TODO restrict the connection on the routes
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($_SESSION['role_id'] != 2){
@@ -75,11 +91,19 @@ class commande{
 
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : switch to == when admin login is adde
 

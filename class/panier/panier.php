@@ -15,11 +15,19 @@ class panier{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
@@ -38,11 +46,19 @@ class panier{
 
     public function create(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){
