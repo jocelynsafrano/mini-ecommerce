@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Mini E-commerce Store</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,15 +16,29 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="index.php?controller=produit&amp;action=index">Produits</a>
-          <a class="dropdown-item" href="index.php?controller=utilisateur&amp;action=index">Clients</a>
           <a class="dropdown-item" href="index.php?controller=commande&amp;action=index">Commandes</a>
-          <a class="dropdown-item" href="index.php?controller=panier_produit&amp;action=index">Panier</a>
+      
+          <?php if($_SESSION['role_id'] == 1) :?>            
+          <a class="dropdown-item" href="index.php?controller=utilisateur&amp;action=index">Clients</a>
+      
+        
+          <?php endif;?>
+          <?php if($_SESSION['role_id'] == 1) :
+            
+            $controller = "panier";
+          else: 
+            $controller = "panier_produit"
+            ?>            
+          <?php endif;?>
+
+          <a class="dropdown-item" href="index.php?controller=<?= $controller ?>&amp;action=index">Panier</a>
+          
         </div>
       </li>
     </ul>
       
       <?php endif; ?>
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav">
     
     <?php if(isset($_SESSION['id'])) :?>
       <li class="nav-item ">

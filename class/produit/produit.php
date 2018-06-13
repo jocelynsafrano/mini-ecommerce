@@ -7,18 +7,17 @@ class produit{
     public $nom;
     public $description;
     public $utilisateur_id;
-    public $prix_ht = '0000000000';
+    public $prix_ht;
     public $date_creation;
     public $date_modification;
-    public $is_deleted = 0;
+    public $is_deleted;
     public $post;
     public $get;   
 
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
-        $this->date_creation = date('d-m-Y');
-        $this->date_modification = date('d-m-Y');
+        $this->date_creation = date('Y-m-d');
     }
 
     public function index($messages = NULL){
@@ -116,6 +115,7 @@ class produit{
         $this->Set('description', $this->post['description']);
         $this->Set('prix_ht', intval($this->post['prix_ht']));
         
+        
         $this->Add();
         
         $this->index();
@@ -156,12 +156,12 @@ class produit{
             return require '../views/templates/produit/edit.php';
         }
 
-        //header('Location: ' . $_SERVER['HTTP_REFERER']);
-        //exit;
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
     }
 
 
-    public function update(){
+    public function updateDb(){
 
         if(!isset($_SESSION['id'])){
 
@@ -197,24 +197,24 @@ class produit{
             return;
         }
 
-
-        $this->Set('id', intval($this->post['produit_id']));
+        $this->Set('id', $this->post['produit_id']);
 
         $this->Load();
 
         $this->Set('nom', $this->post['nom']);
         $this->Set('description',$this->post['description']);
         $this->Set('prix_ht', intval($this->post['prix_ht']));
-        
-        // TODO : fix the bug made by this line (the update function)
-        $this->Update();
-        echo '<pre>';
-        var_dump($this);
-        echo '</pre>';
-        
+        $this->Set('date_modification', date('Y-m-d'));
 
-        $this->index();
-        var_dump($this->post);
+        $this->Update();
+        
+        $_SESSION['messages'] = [
+            'body' => "Produit a été modifé!",
+            'type' => "success"
+        ];
+
+        header('Location: index.php?controller=produit&action=index');
+        exit;    
     }
 
     public function destroy(){

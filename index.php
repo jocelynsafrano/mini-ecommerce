@@ -1,1 +1,3 @@
-Go to /public
+<?php
+
+header('Location: public');

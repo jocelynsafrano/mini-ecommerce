@@ -105,15 +105,38 @@ class commande{
             header('Location: index.php?controller=auth&action=index');
             exit;
         }
-        // TODO : switch to == when admin login is adde
+        // TODO : Vérifier si on est bien le propriatire de qu'on upprime et édite
+
+        if(!isset($this->get['commande_id']) || empty($this->get['commande_id'])){
+            $_SESSION['messages'] = [
+                'body' => "Aucune commande n'est séléctionné",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=commande&action=index');
+            exit;
+        }
+
+        $query = 'DELETE FROM `commande_produit` USING commande_produit WHERE commande_id = :id';
+
+        $bind = [
+            'id' => $this->get['commande_id']
+        ];
+
+        $this->Sql($query, $bind);
 
         $this->Set('id', $this->get['commande_id']);
-        $deleted = $this->Delete();
+        $this->Delete();
 
-        if(!$deleted){
-            echo 'Can\'t delete the order it has products you must send';
-            return;
-        }
+        $_SESSION['messages'] = [
+            'body' => "Commande annulée aces succès !",
+            'type' => "success"
+        ];
 
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
