@@ -90,7 +90,7 @@ class commande_produit{
  
         $_SESSION['messages'] = [
             'body' => "Votre panier a été validé",
-            'type' => "danger"
+            'type' => "success"
         ];
         header('Location: index.php?controller=commande&action=index');
         exit;

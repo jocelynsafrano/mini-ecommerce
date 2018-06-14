@@ -6,11 +6,13 @@ class panier{
     public $id;
     public $utilisateur_id;
     public $date_creation;
+    public $is_deleted;
 
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
+        $this->is_deleted = 0;
     }
 
     public function index(){

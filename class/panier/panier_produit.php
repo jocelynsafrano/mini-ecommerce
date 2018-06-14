@@ -111,13 +111,8 @@ class panier_produit{
         if(!$result){
             $this->panier->Set('utilisateur_id' , $_SESSION['id']);
             
-            $added = $this->panier->Add();
-
-            if($added != 1){
-                echo "Can't add the user' cart";
-                return;
-            }
-            
+            $this->panier->Add();
+           
             $search = array ();
             $search[ "utilisateur_id" ] = $_SESSION['id'];
             $result = $this->panier->Find($search);

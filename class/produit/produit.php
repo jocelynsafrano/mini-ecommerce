@@ -8,7 +8,7 @@ class produit{
     public $description;
     public $utilisateur_id;
     public $nom_categorie;
-    pubflic $prix_ht = '0000000000';
+    public $prix_ht = '0000000000';
     public $date_creation;
     public $date_modification;
     public $is_deleted;
