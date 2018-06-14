@@ -33,7 +33,7 @@
   endforeach;?>
     </tbody>
   </table>
-<a class="btn btn-primary" href="index.php?controller=commande_produit&amp;action=store&amp;" role="button">Valider la commande</a>
+<a class="btn btn-primary" href="index.php?controller=commande_produit&amp;action=store&amp;commande_id" role="button">Valider la commande</a>
   
 </div>  
 

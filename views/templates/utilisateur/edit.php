@@ -5,7 +5,7 @@
   <h1 class="text-left"><?= $title ?></h1>
 
 <div class="container">
-    <form action="index.php?controller=utilisateur&amp;action=update" method="POST">
+    <form action="index.php?controller=utilisateur&amp;action=updateDb" method="POST">
         <div class="form-group">
             <label for="nom">Email address</label>
             <input name="nom" type="text" class="form-control" id="nom" value="<?= $user['nom'] ?>">

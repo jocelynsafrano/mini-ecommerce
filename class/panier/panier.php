@@ -15,16 +15,35 @@ class panier{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des produits d\un panier en tant qu\'Admin';
-            return;
+        if($_SESSION['role_id'] != 1){
+            
+            $_SESSION['messages'] = [
+                'body' => "Vous devrez être administrateur pour effectuer cette action !",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         // TODO select all the products in the cart
@@ -38,11 +57,19 @@ class panier{
 
     public function create(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
         if($_SESSION['role_id'] != 2){

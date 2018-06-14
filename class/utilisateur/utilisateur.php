@@ -14,6 +14,7 @@ class utilisateur{
     public $role_id = 2;
     public $date_creation;
     public $date_modification;
+    public $is_deleted;
     public $post;
     public $get;
 
@@ -27,19 +28,36 @@ class utilisateur{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if($_SESSION['role_id'] != 1){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+            $_SESSION['messages'] = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des clients",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+
+            header('Location: index.php?controller=produit&action=index');
+            exit;
         }
         
-        $query = 'SELECT id, nom, prenom, email, date_creation, date_modification FROM utilisateur';
+        $query = 'SELECT id, nom, prenom, email, date_creation, date_modification FROM utilisateur WHERE is_deleted = 0';
         $returnFields = ['id', 'nom', 'prenom', 'email', 'date_creation', 'date_modification'];
         
         $users = $this->StructList($query, $returnFields);
@@ -49,13 +67,20 @@ class utilisateur{
 
     public function show(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
@@ -72,61 +97,105 @@ class utilisateur{
         require '../views/templates/utilisateur/show.php';
     }
 
-    public function search(){
-        $query = 'SELECT id, nom, prenom, email FROM  WHERE role_id = 2';
-        $fields = ['id', 'nom', 'prenom', 'email'];
-        
-        $res = $this->StructList($query,$fields, "json" );
-        echo $res;
-        
-    }
-
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
-        }
 
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
+        if($_SESSION['role_id'] != 1){
+            $_SESSION['messages'] = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des clients",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
         if(!isset($this->get['id']) || empty($this->get['id'])){
-            echo 'Please specify a user to delete';
-            // TODO :: create a message variable and require the view
-        }
-        // TODO : add javascript delete confirmation
-        $this->Set('id', $this->get['id']);
-        $deleted = $this->Delete();
-    
-        if($deleted){
-            return $this->index();
+            $_SESSION['messages'] = [
+                'body' => "Please specify a user to delete",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
-        echo 'Can\'t delete the user he has orders';
-        return;
+        $this->Set('id', $this->get['id']);
+
+        $this->Load();
+
+        $this->Set('is_deleted', 1);
+
+        $this->Update();
+
+        $query = 'SELECT id, nom, prenom, email, date_creation, date_modification FROM utilisateur WHERE is_deleted = 0';
+        $returnFields = ['id', 'nom', 'prenom', 'email', 'date_creation', 'date_modification'];
+        
+        $users = $this->StructList($query, $returnFields);
+        
+        return require '../views/templates/utilisateur/index.php';
     }
 
     public function edit(){
 
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($_SESSION['role_id'] != 1){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
-            return;
+            $_SESSION['messages'] = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des clients",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
-        //$query = 'SELECT id, nom, prenom, email FROM utilisateurs WHERE role_id = 2';
         $query = 'SELECT id, nom, prenom, email FROM utilisateur WHERE id = :id';
         
         $returnFields = ['id', 'nom', 'prenom', 'email'];
         
-        $bind = ['id' => $this->get['utilisateur_id']];
+        $bind = ['id' => $this->get['id']];
         
         $user = $this->StructList($query, $returnFields, $bind);
         
@@ -135,31 +204,85 @@ class utilisateur{
             return require '../views/templates/utilisateur/edit.php';
         }
 
-        header('Location : ' . $_SERVER['HTTP_REFERER']);
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }
 
-    public function update(){
+    public function updateDb(){
 
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
+
+        if($_SESSION['role_id'] != 1){
+            $_SESSION['messages'] = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des clients",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if(!isset($this->post['nom']) || empty($this->post['nom'])){
-            $message = "Aucun nom n'est attribué";
-            $this->index();
+            $_SESSION['messages'] = [
+                'body' => "Aucun nom n'est attribué",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         if(!isset($this->post['prenom']) || empty($this->post['prenom'])){
-            $message = "Aucun prenom n'est attribué";
-            $this->index();
+            $_SESSION['messages'] = [
+                'body' => "Aucun prenom n'est attribué",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
+
         if(!isset($this->post['email']) || empty($this->post['email'])){
-            $message = "Aucun email n'est attribué";
-            $this->index();
+            $_SESSION['messages'] = [
+                'body' => "Aucun email n'est attribué",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         $this->Set('id', $this->post['utilisateur_id']);
@@ -172,7 +295,12 @@ class utilisateur{
 
         $this->Update();
 
-        header('Location : ' . $_SERVER['HTTP_REFERER']);
+        $_SESSION['messages'] = [
+            'body' => "Utilisateur modifié avec succès !",
+            'type' => "success"
+        ];
+        
+        header('Location: index.php?controller=utilisateur&action=index');
         exit;
     }
 }

@@ -20,17 +20,21 @@ class commande_produit{
 
     public function store(){
 
-
-
-        // On doit créer la commande et lui assigner les produits du panier en vidant le panier après
-
         // TODO restrict the connection on the routes
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         // Vérifier si le panier n'est pas vide question de ne pas créer des commandes vides
@@ -45,13 +49,13 @@ class commande_produit{
         $result = $this->Sql($req, "COUNT(*)", $bind);
 
         if(intval($result[0]["COUNT(*)"]) <= 0){
+            
             $messages = [
                 'body' => "Votre panier est vide ! Vous ne pouvez pas valider une commande !",
                 'type' => "danger"
             ];
             // TODO : Verifier cette ligne
-            var_dump($_SERVER['HTTP_REFERER']);
-            header('Location : ' . $_SERVER['HTTP_REFERER']);
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
             //exit;
         }
         
@@ -83,22 +87,30 @@ class commande_produit{
 
         $this->Sql($req, $bind);
         
-        $messages = [
+ 
+        $_SESSION['messages'] = [
             'body' => "Votre panier a été validé",
             'type' => "danger"
         ];
-
-        header('Location : ' . $_SERVER['HTTP_REFERER']);
+        header('Location: index.php?controller=commande&action=index');
         exit;
     }
 
     public function show(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         // TODO : swith to == when admin login is added
        
@@ -117,13 +129,21 @@ class commande_produit{
 
     public function destroy(){
         if(!isset($_SESSION['id'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Vous devrez être connecté pour effectuer cette action !",
                 'type' => "danger"
             ];
-            return require '../views/templates/auth/index.php';
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
-        // TODO : swith to == when admin login is added
+        
         if($_SESSION['role_id'] != 2){
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
@@ -136,7 +156,7 @@ class commande_produit{
             echo 'Couldn\'t take the product off the cart';
             return;
         }
-
+        // TODO : pass the error messages by session variables
         header('Location: ' . $_SERVER['HTTP_REFERER']);
         exit;
     }

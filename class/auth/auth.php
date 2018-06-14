@@ -13,25 +13,39 @@ class Auth{
         $this->get = $get;
     }
 
-    public function index(array $messages = NULL){
+    public function index(){
         return require '../views/templates/auth/index.php';
     }
 
     public function login(){
         if(!isset($this->post['email']) || empty($this->post['email'])){
-            $messages = [
+            $_SESSION['messages'] = [
                 'body' => "Can't find any email",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if(!isset($this->post['mdp']) || empty($this->post['mdp'])){
-            $messages = [
+ 
+            $_SESSION['messages'] = [
                 'body' => "Can't find any password",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
 
@@ -40,19 +54,34 @@ class Auth{
         $result = $this->u->Find($search);
         
         if(empty($result)){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Can't find an account associated to this email",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         if($result[0]['mdp'] != md5($this->post['mdp'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Wrong Password",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
 
         $this->u->Set('id', $result[0]['id']);
@@ -66,41 +95,77 @@ class Auth{
         $_SESSION['ville_id'] = $this->u->ville_id;
         $_SESSION['role_id'] = $this->u->role_id;
         
-        $messages = [
+        $_SESSION['messages'] = [
             'body' => "Vous êtes connecté ! Bienvenue !",
-            'type' => "primary"
+            'type' => "success"
         ];
-        return require '../views/index.php';
+
+        header('Location: index.php?controller=produit&action=index');
+        exit;
     }
 
     public function signup(){
         if(!isset($this->post['nom']) || empty($this->post['nom'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Please specify a name",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         if(!isset($this->post['prenom']) || empty($this->post['prenom'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Please specify a first name",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;    
         }
+
+
         if(!isset($this->post['email']) || empty($this->post['email'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Please specify an email",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit; 
         }
         if(!isset($this->post['mdp']) || empty($this->post['mdp'])){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "Please specify a password",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit; 
         }
 
         $search = array();
@@ -108,11 +173,19 @@ class Auth{
         $result = $this->u->Find($search);
 
         if($result){
-            $messages = [
+
+            $_SESSION['messages'] = [
                 'body' => "This account already exists you must login",
                 'type' => "danger"
             ];
-            return $this->index($messages);
+            
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit; 
         }
 
         $this->u->Set('nom', $this->post['nom']);
@@ -127,13 +200,21 @@ class Auth{
     }
 
     public function logout(){
+        
+
+        $_SESSION['messages'] = [
+            'body' => "Vous êtes déconnecté !",
+            'type' => "danger"
+        ];
+        
+        header('Location: index.php?controller=auth&action=destroy');
+        exit;
+
+    }
+
+    public function destroy(){
+        $this->index();
         session_unset();
         session_destroy();
-        $messages = [
-            'body' => "Vou êtes déconnecté !",
-            'type' => "success"
-        ];
-        $this->index($messages);
-
     }
 }
