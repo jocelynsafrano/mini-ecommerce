@@ -14,8 +14,13 @@
         </div>
 
         <div class="form-group">
-            <label for="prix_ht">Password</label>
-            <input name="prix_ht" type="text" class="form-control" id="prix_ht" placeholder="Password">
+            <label for="prix_ht">Prix hors taxes</label>
+            <input name="prix_ht" type="text" class="form-control" id="prix_ht" placeholder="Prix hors taxes">
+        </div>
+
+        <div class="form-group">
+            <label for="">TOODO : LISTE DEROULANTE DES CATEGORIES</label>
+            <input name="" type="text" class="form-control" id="" placeholder="TOODO : LISTE DEROULANTE DES CATEGORIES">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

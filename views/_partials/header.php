@@ -15,7 +15,10 @@
           Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="index.php?controller=utilisateur&amp;action=index">Clients</a>        
           <a class="dropdown-item" href="index.php?controller=produit&amp;action=index">Produits</a>
+          <a class="dropdown-item" href="index.php?controller=categorie&amp;action=index">Catégories</a>
+
           <a class="dropdown-item" href="index.php?controller=commande&amp;action=index">Commandes</a>
       
           <?php if($_SESSION['role_id'] == 1) :?>            

@@ -7,7 +7,8 @@ class produit{
     public $nom;
     public $description;
     public $utilisateur_id;
-    public $prix_ht;
+    public $nom_categorie;
+    pubflic $prix_ht = '0000000000';
     public $date_creation;
     public $date_modification;
     public $is_deleted;
@@ -37,8 +38,9 @@ class produit{
             exit;
         }
         // TODO : swith to == when admin login is added
-        $query = 'SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0';
-        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
+        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit
+         AS p INNER JOIN categorie_produit AS cp ON p.id = cp.id_produit INNER JOIN categorie AS c ON cp.id_categorie = c.id';
+        $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
         
         $produits = $this->StructList($query, $returnFields);
         
