@@ -70,5 +70,12 @@ class categorie{
         $this->Set('id', $this->get['categorie_id']);
         $deleted = $this->Delete();
         }
+
+    public function filter_categorie(){
+        $query = 'SELECT id, nom FROM categorie';
+        $returnFields = ['id', 'nom'];
+
+        require '../views/template/produit/index.php';
+    }
     }
 }

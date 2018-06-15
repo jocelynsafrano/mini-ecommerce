@@ -249,4 +249,15 @@ class produit{
         
         $this->index();
     }
+
+    public function filter() { // Passage de l'id en paramètre
+        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit
+         AS p INNER JOIN categorie_produit AS cp ON p.id = cp.id_produit INNER JOIN categorie AS c ON cp.id_categorie = c.id WHERE p.id_categorie = :id_Categorie';
+
+        $bind = ['id_Categorie' => this->id_Categorie];
+        
+        
+        
+        $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
+    }
 }
