@@ -37,12 +37,8 @@
             <td>
             <?php if($_SESSION['role_id'] == 1): ?>
 
-<<<<<<< HEAD
             <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer produit</a>
             <a href="index.php?controller=produit&amp;action=edit&amp;produit_id=<?= $produit['id'] ?>">Editer produit</a>
-=======
-            <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer le produit</a>
->>>>>>> editCategorie
             
             <?php else:  ?>
             <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
