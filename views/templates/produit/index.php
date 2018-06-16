@@ -3,10 +3,27 @@
 <?php ob_start(); ?>
 <div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
-  <?php if($_SESSION['role_id'] == 1):?>
+   <div class="container d-flex m-4">
+    <form action="index.php?controller=produit&amp;action=search" method="POST" class="form-inline ml-auto">
+      <input name="nom_produit" class="form-control mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+
+<?php if($_SESSION['role_id'] == 1):?>
   <a class="btn btn-primary m-4" href="index.php?controller=produit&amp;action=create" role="button">Créer un produit</a>
 <?php endif; ?>
   
+<form action="index.php" method="GET">
+<select id="categorie_id">
+  <?php
+  $categories = categorie->filter_categorie();
+  foreach($categories as $categorie):?>
+    <option value="<?=$categorie['id']?>" > <?=$categorie['nom']?> </option>
+  <?php
+  endforeach;?>
+</form>
+
   <table class="table">
     <thead class="thead-dark">
       <tr>

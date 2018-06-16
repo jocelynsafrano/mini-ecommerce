@@ -22,7 +22,7 @@ require('../class/produit/produit.php');
 require('../class/panier/panier_produit.php');
 require('../class/categorie/categorie.php');
 
-if(isset($_GET['controller']) && isset($_GET['action'])){
+if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['action']) && !empty($_GET['action'])){
 
     $className = $_GET['controller'];
 
