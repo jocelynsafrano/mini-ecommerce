@@ -65,6 +65,10 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
         $commande = new commande;
         $class = new $className($_POST, $_GET, $commande);
         
+    }elseif($_GET['controller'] == 'produit'){
+        $categorie = new categorie;
+        $class = new $className($_POST, $_GET, $categorie);
+        
     }else{
         $class = new $className($_POST, $_GET);
     }
