@@ -11,7 +11,6 @@
   </div>
   <div class="container d-flex m-4">
   <?php 
-      //categorie::select_cat();
       echo $categorieListe;
       if($_SESSION['role_id'] == 1):
   ?>

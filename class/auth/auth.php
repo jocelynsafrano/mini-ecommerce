@@ -213,8 +213,8 @@ class Auth{
     }
 
     public function destroy(){
-        $this->index();
         session_unset();
         session_destroy();
+        $this->index();
     }
 }

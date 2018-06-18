@@ -18,12 +18,33 @@ class categorie{
 
     public function index(){
         if(!isset($_SESSION['id'])){
-            echo 'Vous devez être connecté pour effectuer cette action';
-            return;
+
+            $_SESSION['messages'] = [
+                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         if($_SESSION['role_id'] != 1){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des catégories';
-            return;
+            $_SESSION['messages'] = [
+                'body' => "Vous n'êtes pas autorisé visualiser la liste des catégories",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+
+            header('Location: index.php?controller=produit&action=index');
+            exit;
         }
         $query = 'SELECT id, nom, description, date_creation, date_modification FROM categorie';
         $returnFields = ['id', 'nom', 'description', 'date_creation', 'date_modification'];

@@ -16,7 +16,7 @@ class produit{
     public $get;
     public $categorie;
 
-    public function __construct($post = NULL, $get = NULL, categorie $categorie){
+    public function __construct($post = NULL, $get = NULL, categorie $categorie = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
