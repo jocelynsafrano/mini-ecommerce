@@ -8,20 +8,22 @@ class produit{
     public $description;
     public $utilisateur_id;
     public $nom_categorie;
-    pubflic $prix_ht = '0000000000';
+    public $prix_ht = '0000000000';
     public $date_creation;
     public $date_modification;
     public $is_deleted;
     public $post;
-    public $get;   
+    public $get;
+    public $categorie;
 
-    public function __construct($post = NULL, $get = NULL){
+    public function __construct($post = NULL, $get = NULL, categorie $categorie){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
+        $this->categorie = $categorie;
     }
 
-    public function index($messages = NULL){
+    public function index(){
         if(!isset($_SESSION['id'])){
 
             $_SESSION['messages'] = [
@@ -33,7 +35,7 @@ class produit{
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;
             } 
-            
+        
             header('Location: index.php?controller=auth&action=index');
             exit;
         }
@@ -44,6 +46,11 @@ class produit{
         
         $produits = $this->StructList($query, $returnFields);
         
+        $config['attr']['id'] = "categorie"; 
+        ob_start();
+        $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
+        $categorieListe = ob_get_clean();
+
         require '../views/templates/produit/index.php';
     }
 
@@ -248,5 +255,17 @@ class produit{
         $deleted = $this->Sql($req, $bind);
         
         $this->index();
+    }
+
+    public function filter() { // Passage de l'id en paramètre
+    $query = 'SELECT p.id, p.nom, c.nom AS nom_categorie, p.description, p.prix_ht, p.date_creation, p.date_modification FROM categorie_produit INNER JOIN categorie AS c ON c.id = categorie_produit.id_categorie INNER JOIN produit AS p ON p.id = categorie_produit.id_produit WHERE c.id = :id_categorie';
+
+        $bind = ['id_categorie' => $this->get['categorie_id']];
+        
+        $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
+
+        $json  = $this->StructList($query, $returnFields, $bind,"json");
+        
+        echo $json;
     }
 }
