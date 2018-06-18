@@ -42,9 +42,6 @@ Visualiser la liste de commandes passées
 Voir ligne de commande
 Annuler une commande
 Création d'un menu adaptable au role de l'utilisateur
-
-
-
     - Gestion des messages affichés aux utilisateurs après chaque action (À finir)
 
 
