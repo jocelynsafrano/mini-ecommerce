@@ -1,75 +1,20 @@
-function queryJSON(query){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-            // Create the tables
-            for(var i = 0 ; i < myObj.length ; i++ ){
-
-                if(myObj[i].nom == query){
-                    tr = document.createElement('tr');
-                    td = document.createElement('td');
-                    tr.appendChild(td);
-                    tbody = document.getElementById('index-results');
-                    tbody.appendChild(tr);
-                    td.innerHTML = myObj[i].nom;
-           
-                }
-                
+  
+  $(document).ready(function(){
+    $('#categorie').change(function() {
+        var id = $(this).val();
+        $.ajax({
+          url:"index.php?controller=produit&action=filter&categorie_id=" + id,
+          method:"GET",          
+          success:function(data){
+            data = JSON.parse(data);
+            var content = "";       
+            for(i=0; i<data.length; i++){
+              
+              content += '<tr> <td>' + data[i].id +'</td> <td>' + data[i].nom + '</td> <td>' + data[i].description + '</td> <td>' + data[i].nom_categorie + '</td> <td>' + data[i].prix_ht + '</td> <td>' + data[i].date_creation + '</td> <td>' + data[i].date_modification + '</td> <td>  <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=' + data[i].id+ '>Ajouter au panier</a> </td> </tr>';
             }
-        }
-    };
-    xmlhttp.open("GET", "index.php?controller=" + getVariable("controller")  + "&action=search&query=" + query, true);
-    xmlhttp.send();
-}
-
-function filterSearch(query){
-    // Take the query and compare it with each line on the table ifyou find a line tht doesn't match the query then display none
-
-    var x = document.getElementsByClassName("nom");
-    
-    var pattern = new RegExp("*" + query + "*");    
-    console.log(pattern);
-    if(x){
-        for(var i = 0 ; i < x.length ; i++){
-
-            if(!pattern.test(x[i].innerHTML)){
-                x[i].parentElement.style.display = "none";
-                console.log(x[i].parentElement);
-            }
-
-            if(!pattern.test("Hamza")){
-                console.log("failed");
-            }else{
-                console.log("success");
-            }
-
-            console.log(x[i].innerHTML);
-
-
-        }
-    }
-    
-    
-}
-
-function getVariable(param){
-
-    var $_GET = {};
-    if(document.location.toString().indexOf('?') !== -1) {
-        var query = document.location
-                    .toString()
-                    // get the query string
-                    .replace(/^.*?\?/, '')
-                    // and remove any existing hash string (thanks, @vrijdenker)
-                    .replace(/#.*$/, '')
-                    .split('&');
-
-        for(var i=0, l=query.length; i<l; i++) {
-        var aux = decodeURIComponent(query[i]).split('=');
-        $_GET[aux[0]] = aux[1];
-        }
-    }
-    //get the 'index' query parameter
-   return $_GET[param];
-}
+            
+            $('#display_products').html(content);
+          }
+        });
+      });
+    });

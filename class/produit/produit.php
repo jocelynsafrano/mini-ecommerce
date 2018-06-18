@@ -89,6 +89,13 @@ class produit{
         $returnFields = ['id', 'nom_categorie', 'date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
         
         $produits = $this->StructList($query, $returnFields, $bind);
+
+        $config['attr']['id'] = "categorie"; 
+        ob_start();
+        $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
+        $categorieListe = ob_get_clean();
+
+        
         require '../views/templates/produit/index.php';
     }
 
@@ -285,7 +292,7 @@ class produit{
     }
 
     public function filter() { // Passage de l'id en paramètre
-    $query = 'SELECT p.id, p.nom, c.nom AS nom_categorie, p.description, p.prix_ht, p.date_creation, p.date_modification FROM categorie_produit INNER JOIN categorie AS c ON c.id = categorie_produit.id_categorie INNER JOIN produit AS p ON p.id = categorie_produit.id_produit WHERE c.id = :id_categorie';
+    $query = 'SELECT p.id, p.nom, c.nom AS nom_categorie, p.description, p.prix_ht, p.date_creation, p.date_modification FROM categorie_produit INNER JOIN categorie AS c ON c.id = categorie_produit.categorie_id INNER JOIN produit AS p ON p.id = categorie_produit.produit_id WHERE c.id = :id_categorie';
 
         $bind = ['id_categorie' => $this->get['categorie_id']];
         
