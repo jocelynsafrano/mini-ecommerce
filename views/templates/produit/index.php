@@ -9,7 +9,6 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
-  <div class="container d-flex m-4">
   <?php 
       //categorie::select_cat();
       echo $categorieListe;
@@ -19,7 +18,6 @@
   <?php 
       endif;
   ?>
-  </div>
 
   <table class="table">
     <thead class="thead-dark">
