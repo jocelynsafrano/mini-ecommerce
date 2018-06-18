@@ -1,8 +1,6 @@
 <?php
 
 class Auth{
-    use Genos;
-
     public $u;
     public $post;
     public $get;
@@ -193,14 +191,23 @@ class Auth{
         $this->u->Set('email', $this->post['email']);
         $this->u->Set('mdp', md5($this->post['mdp']));
         $this->u->Set('role_id', $this->post['role']);
+        $this->u->Set('is_deleted', 0);
 
         $this->u->Add();
 
-        require '../views/index.php';
+        $_SESSION['messages'] = [
+            'body' => "Compte créé avec succès ! Vous pouvez maintenant vous connecter !",
+            'type' => "success"
+        ];
+
+        
+        header('Location: index.php?controller=auth&action=index');
+        exit; 
     }
 
     public function logout(){
         
+        session_unset();
 
         $_SESSION['messages'] = [
             'body' => "Vous êtes déconnecté !",
@@ -214,7 +221,6 @@ class Auth{
 
     public function destroy(){
         $this->index();
-        session_unset();
         session_destroy();
     }
 }

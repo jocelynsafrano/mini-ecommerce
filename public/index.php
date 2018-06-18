@@ -21,6 +21,7 @@ require('../class/panier/panier.php');
 require('../class/produit/produit.php');
 require('../class/panier/panier_produit.php');
 require('../class/categorie/categorie.php');
+require('../class/categorie/categorie_produit.php');
 
 if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['action']) && !empty($_GET['action'])){
 
@@ -29,29 +30,23 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
     $functionName = $_GET['action'];
 
     if(!class_exists($className)){
-        $auth = new Auth();
-
-        $auth->index(
-            $messages = [
-                'body' => '404 error',
-                'type' => 'danger'
-            ]
-        );
+        $_SESSION['messages'] = [
+            'body' => "404 Error",
+            'type' => "danger"
+        ];
+        header('Location: index.php?controller=auth&action=index');
         exit;
     }
 
     if(!method_exists($className, $functionName)){
-        $auth = new Auth();
-
-        $auth->index(
-            $messages = [
-                'body' => '404 error',
-                'type' => 'danger'
-            ]
-        );
+        $_SESSION['messages'] = [
+            'body' => "404 Error",
+            'type' => "danger"
+        ];
+        header('Location: index.php?controller=auth&action=index');
         exit;
-        //TODO add redirection after login
     }
+
     if($_GET['controller'] == 'auth'){
         $u = new utilisateur;
         $class = new $className($_POST, $_GET, $u);
@@ -64,6 +59,11 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
     }elseif($_GET['controller'] == 'commande_produit'){
         $commande = new commande;
         $class = new $className($_POST, $_GET, $commande);
+        
+    }elseif($_GET['controller'] == 'produit'){
+        $categorie = new categorie;
+        $categorie_produit = new categorie_produit;
+        $class = new $className($_POST, $_GET, $categorie, $categorie_produit);
         
     }else{
         $class = new $className($_POST, $_GET);

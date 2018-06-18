@@ -7,18 +7,21 @@ class produit{
     public $nom;
     public $description;
     public $utilisateur_id;
-    public $nom_categorie;
     public $prix_ht = '0000000000';
     public $date_creation;
     public $date_modification;
     public $is_deleted;
     public $post;
-    public $get;   
+    public $get;
+    public $categorie;
+    public $categorie_produit;
 
-    public function __construct($post = NULL, $get = NULL){
+    public function __construct($post = NULL, $get = NULL, categorie $c = NULL, categorie_produit $cp = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
+        $this->categorie = $c;
+        $this->categorie_produit = $cp;
     }
 
     public function index($messages = NULL){
@@ -38,8 +41,10 @@ class produit{
             exit;
         }
         // TODO : swith to == when admin login is added
-        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit
-         AS p INNER JOIN categorie_produit AS cp ON p.id = cp.id_produit INNER JOIN categorie AS c ON cp.id_categorie = c.id';
+        //$query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id, p.nom, p.description, c.nom';
+
+        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0';
+    
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
         
         $produits = $this->StructList($query, $returnFields);
@@ -72,11 +77,13 @@ class produit{
             return $this->index();
         }
 
-        $query = "SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0 AND nom LIKE :nom";
+        //$query = "SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0 AND nom LIKE :nom";
+
+        $query = "SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE    :nom";
         
         $bind = ['nom' => '%' . $this->post['nom_produit'] . '%'];
 
-        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
+        $returnFields = ['id', 'nom_categorie', 'date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
         
         $produits = $this->StructList($query, $returnFields, $bind);
         require '../views/templates/produit/index.php';
@@ -116,7 +123,7 @@ class produit{
         $this->Set('nom', $this->post['nom']);
         $this->Set('description', $this->post['description']);
         $this->Set('prix_ht', intval($this->post['prix_ht']));
-        
+        $this->Set('is_deleted', 0);
         
         $this->Add();
         
@@ -152,9 +159,17 @@ class produit{
         $bind = ['id' => $this->get['produit_id']];
         
         $produit = $this->StructList($query, $returnFields, $bind);
+        $produit = $produit[0];
+        // todo : preselect the desired categories
+
+        ob_start();
+        $options['class'] = "custom-select";
+        $options['attr']['multiple'] = "multiple";
+        $this->categorie->SelectList("categorie_id[]", "id", "nom", $options);
+        $categorieSelectList = ob_get_clean();
+
 
         if(!empty($produit)){
-            $produit = $produit[0];
             return require '../views/templates/produit/edit.php';
         }
 
@@ -199,6 +214,11 @@ class produit{
             return;
         }
 
+        if(!isset($this->post['categorie_id']) || empty($this->post['categorie_id'])){
+            echo "Aucune catégorie n'est séléctionnée !";
+            return;
+        }
+
         $this->Set('id', $this->post['produit_id']);
 
         $this->Load();
@@ -210,10 +230,21 @@ class produit{
 
         $this->Update();
         
+        //die();
+        
+
+        foreach($this->post['categorie_id'] as $categorie_id){
+        $this->categorie_produit->Set('produit_id', $this->post['produit_id']);
+            
+            $this->categorie_produit->Set('categorie_id',   $categorie_id);
+            $this->categorie_produit->Add();
+        }
+        
         $_SESSION['messages'] = [
             'body' => "Produit a été modifé!",
             'type' => "success"
         ];
+
 
         header('Location: index.php?controller=produit&action=index');
         exit;    
