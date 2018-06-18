@@ -267,4 +267,22 @@ class categorie{
         
         return $this->index();
     }
+
+    public static function select_cat(){
+        $query = 'SELECT * FROM categorie';
+        $fields = ['id', 'nom'];
+
+        $c = new categorie;
+        $categorie = $c->StructList($query, $fields);
+
+        require '../views/templates/categorie/index.php';
+    ?>
+        <select name="id" class="form-control">
+            <?php foreach($categories as $categorie){ ?>
+                    <option value="<?php echo categories['id'] ?>" > <?php echo $categories['nom'] ?></option>
+            <?php } ?>
+        </select>
+    <?php }
+    
 }
+    
