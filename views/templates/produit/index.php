@@ -72,4 +72,4 @@
   </script>
 <?php $content = ob_get_clean(); ?>
 
-<?php require '../views/index.php';?>
+<?php require '../views/index.php'; ?>

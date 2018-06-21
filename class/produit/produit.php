@@ -15,7 +15,7 @@ class produit{
     public $get;
     public $categorie;
 
-    public function __construct($post = NULL, $get = NULL, categorie $categorie){
+    public function __construct($post = NULL, $get = NULL, categorie $categorie = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
@@ -76,27 +76,23 @@ class produit{
             exit;
         }
         
-        if(empty($this->post['nom_produit'])){
-            return $this->index();
+        if(!isset($this->post['query']) || empty($this->post['query'])){
+            var_dump($this->post['query']);
         }
 
-        //$query = "SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0 AND nom LIKE :nom";
 
-        $query = "SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE    :nom";
+        $query = "SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE :nom OR p.description LIKE :description OR c.nom LIKE :nom_categorie";
         
-        $bind = ['nom' => '%' . $this->post['nom_produit'] . '%'];
+        $bind = [
+            'nom' => '%' . $this->post['query'] . '%',
+            'description' => '%' . $this->post['query'] . '%',
+            'nom_categorie' => '%' . $this->post['query'] . '%',
+        ];
 
         $returnFields = ['id', 'nom_categorie', 'date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
         
-        $produits = $this->StructList($query, $returnFields, $bind);
-
-        $config['attr']['id'] = "categorie"; 
-        ob_start();
-        $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
-        $categorieListe = ob_get_clean();
-
-        
-        require '../views/templates/produit/index.php';
+        echo $produits = $this->StructList($query, $returnFields, $bind, "json");        
+        return true;
     }
 
     public function store(){
