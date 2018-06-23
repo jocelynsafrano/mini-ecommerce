@@ -74,7 +74,7 @@ class panier{
             exit;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
+        if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }

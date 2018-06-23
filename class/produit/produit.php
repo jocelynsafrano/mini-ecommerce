@@ -23,24 +23,6 @@ class produit{
     }
 
     public function index(){
-        if(!isset($_SESSION['id'])){
-
-            $_SESSION['messages'] = [
-                'body' => "Vous devrez être connecté pour effectuer cette action !",
-                'type' => "danger"
-            ];
-
-            if(isset($_SERVER['HTTP_REFERER'])){
-                header('Location: ' . $_SERVER['HTTP_REFERER']);
-                exit;
-            } 
-        
-            header('Location: index.php?controller=auth&action=index');
-            exit;
-        }
-        // TODO : swith to == when admin login is added
-        //$query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id, p.nom, p.description, c.nom';
-
         $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0';
     
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
@@ -48,11 +30,22 @@ class produit{
         $produits = $this->StructList($query, $returnFields);
         
         $config['attr']['id'] = "categorie"; 
+        $config['attr']['class'] = "custom-select"; 
         ob_start();
         $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
         $categorieListe = ob_get_clean();
 
-        require '../views/templates/produit/index.php';
+      /*  echo "<pre>";
+        var_dump($produits);
+        echo "</pre>";
+die(); */
+        if(isset($_SESSION['id'])){
+            if($_SESSION['role_id'] == 1){
+                return require '../views/templates/produit/index.php';
+            }
+        }
+        
+        return require '../views/templates/produit/front/index.php';
     }
 
     public function create(){

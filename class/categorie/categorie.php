@@ -23,8 +23,35 @@ class categorie{
             return;
         }
         if($_SESSION['role_id'] != 1){
-            echo 'Vous n\'êtes pas autorisé visualiser la liste des catégories';
-            return;
+            
+            $_SESSION['messages'] = [
+                'body' => "Vous devrez être administrateur pour effectuer cette action",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
+        }
+
+        if(!isset($this->get['categorie_id']) || empty($this->get['categorie_id'])){
+            
+            $_SESSION['messages'] = [
+                'body' => "Malheuresement, vous n've aps sélectionné une catégorie !",
+                'type' => "danger"
+            ];
+
+            if(isset($_SERVER['HTTP_REFERER'])){
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } 
+            
+            header('Location: index.php?controller=auth&action=index');
+            exit;
         }
         $query = 'SELECT id, nom, description, date_creation, date_modification FROM categorie WHERE is_deleted = 0';
         $returnFields = ['id', 'nom', 'description', 'date_creation', 'date_modification'];

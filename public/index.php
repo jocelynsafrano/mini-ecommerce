@@ -1,7 +1,19 @@
 <?php
-
+if (!isset($_COOKIE['firsttime']))
+{
+    setcookie("firsttime", "no", time() + (10 * 365 * 24 * 60 * 60));
+    $message = "Waaw, première visite ! Vous êtes le bienvenue.";
+}
 // Ici on intiialise les sessions même si le'utilsateure n'est pas connecté. s'il est connécté on assignera alors les avariables de sessions
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+    if(isset($message)){
+        $_SESSION['messages'] = [
+            'body' => $message,
+            'type' => "success"
+        ];
+    }
+}
 /************************************************************
 Ce fichier est un fichier de routing, ce qui veux dire que ce fichier va appeller la bonne aciton sur le bon controller du bon module situé dans le dossier "class" à la racine du dossier
 
@@ -70,5 +82,6 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
     
     $class->$functionName();
 }else{
-    require '../views/index.php';
+    header('Location: index.php?controller=produit&action=index');
+    exit;
 }
