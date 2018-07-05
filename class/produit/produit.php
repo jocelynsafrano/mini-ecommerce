@@ -23,14 +23,14 @@ class produit{
     }
 
     public function index(){
-        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0';
+        $query = 'SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id';
     
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
         
         $produits = $this->StructList($query, $returnFields);
         
         $config['attr']['id'] = "categorie"; 
-        $config['attr']['class'] = "custom-select"; 
+        $config['attr']['class'] = "custom-select col-sm-6 "; 
         ob_start();
         $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
         $categorieListe = ob_get_clean();
@@ -70,11 +70,11 @@ die(); */
         }
         
         if(!isset($this->post['query']) || empty($this->post['query'])){
-            var_dump($this->post['query']);
+            //var_dump($this->post['query']);
         }
 
 
-        $query = "SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE :nom OR p.description LIKE :description OR c.nom LIKE :nom_categorie";
+        $query = "SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE :nom OR p.description LIKE :description OR c.nom LIKE :nom_categorie GROUP BY p.id";
         
         $bind = [
             'nom' => '%' . $this->post['query'] . '%',

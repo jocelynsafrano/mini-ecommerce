@@ -15,8 +15,8 @@
 	$DATABASE_NAME ='mini-ecommerce';
 	$DATABASE_HOST ='localhost';
 	$DATABASE_PORT ='3306';
-	$DATABASE_USER ='root';
-	$DATABASE_PSWD ='3EhF!t&TtHf3\'s';
+	$DATABASE_USER ='hamza';
+	$DATABASE_PSWD ='';
 
 	define("ID_PRIMARY_DEFAULT",$ID_PRIMARY_DEFAULT);
 	define("TABLE_CASE",$TABLE_CASE);
