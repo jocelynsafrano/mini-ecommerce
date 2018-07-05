@@ -1,7 +1,19 @@
 <?php
-
+if (!isset($_COOKIE['firsttime']))
+{
+    setcookie("firsttime", "no", time() + (10 * 365 * 24 * 60 * 60));
+    $message = "Waaw, première visite ! Vous êtes le bienvenue.";
+}
 // Ici on intiialise les sessions même si le'utilsateure n'est pas connecté. s'il est connécté on assignera alors les avariables de sessions
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+    if(isset($message)){
+        $_SESSION['messages'] = [
+            'body' => $message,
+            'type' => "success"
+        ];
+    }
+}
 /************************************************************
 Ce fichier est un fichier de routing, ce qui veux dire que ce fichier va appeller la bonne aciton sur le bon controller du bon module situé dans le dossier "class" à la racine du dossier
 
@@ -21,6 +33,7 @@ require('../class/panier/panier.php');
 require('../class/produit/produit.php');
 require('../class/panier/panier_produit.php');
 require('../class/categorie/categorie.php');
+//require('../class/categorie/categorie_produit.php');
 
 if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['action']) && !empty($_GET['action'])){
 
@@ -29,29 +42,23 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
     $functionName = $_GET['action'];
 
     if(!class_exists($className)){
-        $auth = new Auth();
-
-        $auth->index(
-            $messages = [
-                'body' => '404 error',
-                'type' => 'danger'
-            ]
-        );
+        $_SESSION['messages'] = [
+            'body' => "404 Error",
+            'type' => "danger"
+        ];
+        header('Location: index.php?controller=auth&action=index');
         exit;
     }
 
     if(!method_exists($className, $functionName)){
-        $auth = new Auth();
-
-        $auth->index(
-            $messages = [
-                'body' => '404 error',
-                'type' => 'danger'
-            ]
-        );
+        $_SESSION['messages'] = [
+            'body' => "404 Error",
+            'type' => "danger"
+        ];
+        header('Location: index.php?controller=auth&action=index');
         exit;
-        //TODO add redirection after login
     }
+
     if($_GET['controller'] == 'auth'){
         $u = new utilisateur;
         $class = new $className($_POST, $_GET, $u);
@@ -75,5 +82,6 @@ if(isset($_GET['controller']) && !empty($_GET['controller']) && isset($_GET['act
     
     $class->$functionName();
 }else{
-    require '../views/index.php';
+    header('Location: index.php?controller=produit&action=index');
+    exit;
 }

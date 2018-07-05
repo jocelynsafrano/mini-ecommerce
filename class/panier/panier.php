@@ -6,11 +6,13 @@ class panier{
     public $id;
     public $utilisateur_id;
     public $date_creation;
+    public $is_deleted;
 
     public function __construct($post = NULL, $get = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
+        $this->is_deleted = 0;
     }
 
     public function index(){
@@ -72,7 +74,7 @@ class panier{
             exit;
         }
         // TODO : swith to == when admin login is added
-        if($_SESSION['role_id'] != 2){
+        if($_SESSION['role_id'] != 1){
             echo 'Vous n\'êtes pas autorisé visualiser la liste des clients';
             return;
         }

@@ -7,7 +7,6 @@ class produit{
     public $nom;
     public $description;
     public $utilisateur_id;
-    public $nom_categorie;
     public $prix_ht = '0000000000';
     public $date_creation;
     public $date_modification;
@@ -16,7 +15,7 @@ class produit{
     public $get;
     public $categorie;
 
-    public function __construct($post = NULL, $get = NULL, categorie $categorie){
+    public function __construct($post = NULL, $get = NULL, categorie $categorie = NULL){
         $this->post = $post;
         $this->get = $get;
         $this->date_creation = date('Y-m-d');
@@ -24,34 +23,29 @@ class produit{
     }
 
     public function index(){
-        if(!isset($_SESSION['id'])){
-
-            $_SESSION['messages'] = [
-                'body' => "Vous devrez être connecté pour effectuer cette action !",
-                'type' => "danger"
-            ];
-
-            if(isset($_SERVER['HTTP_REFERER'])){
-                header('Location: ' . $_SERVER['HTTP_REFERER']);
-                exit;
-            } 
-        
-            header('Location: index.php?controller=auth&action=index');
-            exit;
-        }
-        // TODO : swith to == when admin login is added
-        $query = 'SELECT p.id, p.nom, p.description, c.nom AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit
-         AS p INNER JOIN categorie_produit AS cp ON p.id = cp.id_produit INNER JOIN categorie AS c ON cp.id_categorie = c.id';
+        $query = 'SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id DESC';
+    
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
         
         $produits = $this->StructList($query, $returnFields);
         
         $config['attr']['id'] = "categorie"; 
+        $config['attr']['class'] = "custom-select col-sm-2 "; 
         ob_start();
         $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
         $categorieListe = ob_get_clean();
 
-        require '../views/templates/produit/index.php';
+      /*  echo "<pre>";
+        var_dump($produits);
+        echo "</pre>";
+die(); */
+        if(isset($_SESSION['id'])){
+            if($_SESSION['role_id'] == 1){
+                return require '../views/templates/produit/index.php';
+            }
+        }
+        
+        return require '../views/templates/produit/front/index.php';
     }
 
     public function create(){
@@ -75,18 +69,23 @@ class produit{
             exit;
         }
         
-        if(empty($this->post['nom_produit'])){
-            return $this->index();
+        if(!isset($this->post['query']) || empty($this->post['query'])){
+            //var_dump($this->post['query']);
         }
 
-        $query = "SELECT id, date_creation, date_modification, nom, description, prix_ht FROM produit WHERE is_deleted = 0 AND nom LIKE :nom";
-        
-        $bind = ['nom' => '%' . $this->post['nom_produit'] . '%'];
 
-        $returnFields = ['id','date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
+        $query = "SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 AND p.nom LIKE :nom OR p.description LIKE :description OR c.nom LIKE :nom_categorie GROUP BY p.id";
         
-        $produits = $this->StructList($query, $returnFields, $bind);
-        require '../views/templates/produit/index.php';
+        $bind = [
+            'nom' => '%' . $this->post['query'] . '%',
+            'description' => '%' . $this->post['query'] . '%',
+            'nom_categorie' => '%' . $this->post['query'] . '%',
+        ];
+
+        $returnFields = ['id', 'nom_categorie', 'date_creation', 'date_modification', 'nom', 'description', 'prix_ht'];
+        
+        echo $produits = $this->StructList($query, $returnFields, $bind, "json");        
+        return true;
     }
 
     public function store(){
@@ -123,7 +122,7 @@ class produit{
         $this->Set('nom', $this->post['nom']);
         $this->Set('description', $this->post['description']);
         $this->Set('prix_ht', intval($this->post['prix_ht']));
-        
+        $this->Set('is_deleted', 0);
         
         $this->Add();
         
@@ -159,9 +158,17 @@ class produit{
         $bind = ['id' => $this->get['produit_id']];
         
         $produit = $this->StructList($query, $returnFields, $bind);
+        $produit = $produit[0];
+        // todo : preselect the desired categories
+
+        ob_start();
+        $options['class'] = "custom-select";
+        $options['attr']['multiple'] = "multiple";
+        $this->categorie->SelectList("categorie_id[]", "id", "nom", $options);
+        $categorieSelectList = ob_get_clean();
+
 
         if(!empty($produit)){
-            $produit = $produit[0];
             return require '../views/templates/produit/edit.php';
         }
 
@@ -206,6 +213,7 @@ class produit{
             return;
         }
 
+
         $this->Set('id', $this->post['produit_id']);
 
         $this->Load();
@@ -217,10 +225,13 @@ class produit{
 
         $this->Update();
         
+        //die();
+        
         $_SESSION['messages'] = [
             'body' => "Produit a été modifé!",
             'type' => "success"
         ];
+
 
         header('Location: index.php?controller=produit&action=index');
         exit;    
@@ -258,7 +269,7 @@ class produit{
     }
 
     public function filter() { // Passage de l'id en paramètre
-    $query = 'SELECT p.id, p.nom, c.nom AS nom_categorie, p.description, p.prix_ht, p.date_creation, p.date_modification FROM categorie_produit INNER JOIN categorie AS c ON c.id = categorie_produit.id_categorie INNER JOIN produit AS p ON p.id = categorie_produit.id_produit WHERE c.id = :id_categorie';
+    $query = 'SELECT p.id, p.nom, c.nom AS nom_categorie, p.description, p.prix_ht, p.date_creation, p.date_modification FROM categorie_produit INNER JOIN categorie AS c ON c.id = categorie_produit.categorie_id INNER JOIN produit AS p ON p.id = categorie_produit.produit_id WHERE c.id = :id_categorie';
 
         $bind = ['id_categorie' => $this->get['categorie_id']];
         

@@ -53,8 +53,7 @@ class panier_produit{
         }
 
         // TODO select all the products in the cart
-        $query = 'SELECT panier_produit.id, produit.nom, produit.description, produit.prix_ht FROM panier_produit INNER JOIN produit ON produit.id = panier_produit.produit_id INNER JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id';
-
+        $query = 'SELECT panier_produit.id, produit.nom, produit.description, produit.prix_ht FROM panier_produit LEFT JOIN produit ON produit.id = panier_produit.produit_id LEFT JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id';
         if($_SESSION['role_id'] == 1){
             $utilisateur_id = $this->get['utilisateur_id'];
         }
@@ -65,8 +64,29 @@ class panier_produit{
 
         $bind = array ( "utilisateur_id" => $utilisateur_id);
         $returnFields = ['id', 'nom', 'description', 'prix_ht'];
-        
         $produits = $this->StructList($query, $returnFields, $bind);
+
+        $query = "SELECT COUNT(*) FROM panier_produit INNER JOIN produit ON produit.id = panier_produit.produit_id INNER JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id";
+        
+        $bind = array ( "utilisateur_id" => $utilisateur_id);
+        $returnFields = ['COUNT(*)'];
+
+        $nombreProduits = $this->StructList($query, $returnFields, $bind);
+
+
+        if(intval($nombreProduits[0]['COUNT(*)']) === 0){
+            $_SESSION['messages'] = [
+                'body' => "Malheuresement, votre panier est vide.",
+                'type' => "danger"
+            ];
+        }
+
+        $query = "SELECT SUM(produit.prix_ht) AS total_panier_ht, SUM(produit.prix_ht + (produit.prix_ht * 20/100)) AS total_panier FROM panier_produit INNER JOIN produit ON produit.id = panier_produit.produit_id INNER JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :utilisateur_id";
+        
+        $bind = array ( "utilisateur_id" => $utilisateur_id);
+        $returnFields = ['total_panier_ht', 'total_panier'];
+
+        $totalPanier = $this->StructList($query, $returnFields, $bind);
 
         require '../views/templates/panier/show.php';
     }
@@ -75,8 +95,9 @@ class panier_produit{
 
         if(!isset($_SESSION['id'])){
 
+            $html_login_link = '<a href="index.php?controller=auth&action=index"><em>Se connecter / S\'inscrire</em></a>';
             $_SESSION['messages'] = [
-                'body' => "Vous devrez être connecté pour effectuer cette action !",
+                'body' => "Vous devrez être connecté pour effectuer cette action ! $html_login_link",
                 'type' => "danger"
             ];
 
@@ -91,7 +112,7 @@ class panier_produit{
 
         if($_SESSION['role_id'] != 2){
             $_SESSION['messages'] = [
-                'body' => "Vous n\'êtes pas autorisé composer un panier",
+                'body' => "Vous n\'êtes pas autorisé de construire un panier",
                 'type' => "danger"
             ];
 
@@ -111,13 +132,8 @@ class panier_produit{
         if(!$result){
             $this->panier->Set('utilisateur_id' , $_SESSION['id']);
             
-            $added = $this->panier->Add();
-
-            if($added != 1){
-                echo "Can't add the user' cart";
-                return;
-            }
-            
+            $this->panier->Add();
+           
             $search = array ();
             $search[ "utilisateur_id" ] = $_SESSION['id'];
             $result = $this->panier->Find($search);
@@ -138,8 +154,10 @@ class panier_produit{
             exit;
         }
 
+        $html_cart_link = '<em><a href ="index.php?controller=panier_produit&action=index">Voir Panier</a></em>';
+
         $_SESSION['messages'] = [
-            'body' => "Votre produit a été ajouté au panier",
+            'body' => "Votre produit a été ajouté au panier $html_cart_link",
             'type' => "success"
         ];
 

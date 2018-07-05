@@ -1,7 +1,6 @@
 <?php $title = 'Liste des produits'?>
 
 <?php ob_start(); ?>
-<div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
   <div class="container d-flex m-4">
     <form action="index.php?controller=produit&amp;action=search" method="POST" class="form-inline ml-auto">
@@ -50,11 +49,11 @@
             <td>
             <?php if($_SESSION['role_id'] == 1): ?>
 
-            <a href="index.php?controller=produit&amp;action=edit&amp;produit_id=<?= $produit['id'] ?>">Modifier</a> </td>
-            <td> <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer</a> </td>
+            <a class="btn btn-primary" href="index.php?controller=produit&amp;action=edit&amp;produit_id=<?= $produit['id'] ?>">Modifier</a> </td>
+            <td> <a class="btn btn-primary" href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer</a> </td>
             
             <?php else:  ?>
-            <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
+            <a class="btn btn-primary" href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
             
             <?php endif;  ?>
             </td>
@@ -66,28 +65,8 @@
   </table>
 </div>
 <script>
-  
-  $(document).ready(function(){
-    $('#categorie').change(function() {
-        var id = $(this).val();
-        $.ajax({
-          url:"index.php?controller=produit&action=filter&categorie_id=" + id,
-          method:"GET",          
-          success:function(data){
-            data = JSON.parse(data);
-            console.log(data[0]);    
-            var content = "";       
-            for(i=0; i<data.length; i++){
-              
-              content += '<tr> <td>' + data[i].id +'</td> <td>' + data[i].nom + '</td> <td>' + data[i].description + '</td> <td>' + data[i].nom_categorie + '</td> <td>' + data[i].prix_ht + '</td> <td>' + data[i].date_creation + '</td> <td>' + data[i].date_modification + '</td> <td>  <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a> </td> </tr>';
-            }
 
-            $('#display_products').html(content);
-          }
-        });
-      });
-    });
   </script>
 <?php $content = ob_get_clean(); ?>
 
-<?php require '../views/index.php';?>
+<?php require '../views/index.php'; ?>

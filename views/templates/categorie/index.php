@@ -3,7 +3,9 @@
 <?php ob_start(); ?>
 <div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
-
+  <?php if($_SESSION['role_id'] == 1):?>
+  <a class="btn btn-primary m-4" href="index.php?controller=categorie&amp;action=create" role="button">Créer une catégorie</a>
+<?php endif; ?>
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -27,8 +29,8 @@
       <td><?= $categorie['description'] ?></td>
       <td><?= $categorie['date_creation'] ?></td>
       <td><?= $categorie['date_modification'] ?></td>
-      <td><a href="index.php?controller=categorie&amp;action=edit&amp;categorie=<?= $categorie['id'] ?>">Modifier la catégorie</a></td>
-      <td><a href="index.php?controller=categorie&amp;action=destroy&amp;categorie=<?= $categorie['id'] ?>">Supprimer la catégorie</a>        
+      <td><a class="btn btn-default" href="index.php?controller=categorie&amp;action=edit&amp;categorie_id=<?= $categorie['id'] ?>">Modifier la catégorie</a></td>
+      <td><a class="btn btn-default" href="index.php?controller=categorie&amp;action=destroy&amp;categorie_id=<?= $categorie['id'] ?>">Supprimer la catégorie</a>        
       </tr>
   <?php 
   $i++;

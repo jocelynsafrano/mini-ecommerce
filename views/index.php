@@ -12,11 +12,16 @@
     
     <?php include '../views/_partials/header.php';?>
 
-    <div class="container mt-4">
+    
+
+<div id="content">
+<div class="menu-trigger"></div>
+<div class="container mt-4">
         <?php include '../views/_partials/messages.php';?>
     </div>
 
-<?php if(isset($content)){echo $content;}else{ echo 'Bienvenue';} ?>
+<?php  if(isset($content)){echo $content;}else{ echo 'Bienvenue';} ?>
+</div>
 
     <?php include '../views/_partials/scripts_bottom.php';?>
 </body>

@@ -39,7 +39,7 @@ class commande_produit{
 
         // Vérifier si le panier n'est pas vide question de ne pas créer des commandes vides
 
-        $req = "SELECT COUNT(*) FROM `panier_produit` JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :id";
+        $req = "SELECT COUNT(*) FROM `panier_produit` LEFT JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :id";
 
         $bind = array(
             "id" => $_SESSION['id'],
@@ -48,7 +48,8 @@ class commande_produit{
         $fields = ['COUNT(*)'];
         $result = $this->Sql($req, "COUNT(*)", $bind);
 
-        if(intval($result[0]["COUNT(*)"]) <= 0){
+        var_dump($result);
+        if(intval($result[0]["COUNT(*)"]) == 0){
             
             $messages = [
                 'body' => "Votre panier est vide ! Vous ne pouvez pas valider une commande !",
@@ -56,6 +57,7 @@ class commande_produit{
             ];
             // TODO : Verifier cette ligne
             header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit;
             //exit;
         }
         
@@ -66,7 +68,9 @@ class commande_produit{
         // Copier les produits du panier et les assigner à la commande
         $req = "INSERT INTO commande_produit (commande_id, produit_id)
         SELECT :commande_id, produit_id
-        FROM panier_produit, panier
+        FROM panier_produit 
+        INNER JOIN panier ON panier_produit.panier_id = panier.id
+        INNER JOIN produit ON produit.id = panier_produit.produit_id
         WHERE panier.utilisateur_id = :id";
         
         $bind = array(
@@ -79,7 +83,7 @@ class commande_produit{
 
         // Vider le panier
         
-        $req = "DELETE FROM `panier_produit` USING panier_produit JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :id";
+        $req = "DELETE FROM `panier_produit` USING panier_produit LEFT JOIN panier ON panier.id = panier_produit.panier_id WHERE panier.utilisateur_id = :id";
 
         $bind = array(
             "id" => $_SESSION['id'],
@@ -90,7 +94,7 @@ class commande_produit{
  
         $_SESSION['messages'] = [
             'body' => "Votre panier a été validé",
-            'type' => "danger"
+            'type' => "success"
         ];
         header('Location: index.php?controller=commande&action=index');
         exit;
@@ -112,12 +116,12 @@ class commande_produit{
             header('Location: index.php?controller=auth&action=index');
             exit;
         }
-        // TODO : swith to == when admin login is added
        
-        $req = "SELECT commande_produit.id, `commande_id`, `produit_id`, produit.nom nom_produit, produit.description description_produit , prix_ht FROM `commande_produit` INNER JOIN produit ON produit.id = commande_produit.produit_id WHERE commande_produit.commande_id = :commande_id";
+        $req = "SELECT commande_produit.id, `commande_id`, `produit_id`, produit.nom nom_produit, produit.description description_produit , prix_ht FROM `commande_produit` INNER JOIN produit ON produit.id = commande_produit.produit_id LEFT JOIN commande ON commande.id = commande_produit.commande_id WHERE commande_produit.commande_id = :commande_id AND commande.utilisateur_id = :utilisateur_id";
         
         $bind = array(
-            "commande_id" => $this->get['commande_id']
+            "commande_id" => $this->get['commande_id'],
+            "utilisateur_id" => $_SESSION['id']
         );
 
         $produits = $this->Sql($req, 'commande_id','nom_produit', 'description_produit', 'prix_ht', $bind);

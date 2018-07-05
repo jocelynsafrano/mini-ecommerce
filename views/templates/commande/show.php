@@ -2,7 +2,14 @@
 
 <?php ob_start(); ?>
 <div class="container pt-4">
-  <h1 class="text-left"><?= $title ?></h1>
+  <div class="row">
+    <div class="col-sm-6">
+      <h1 class="text-left"><?= $title ?></h1>
+    </div>
+    <div class="col-sm-6 text-right">
+      <a href="index.php?controller=commande&amp;action=destroy&amp;commande_id=<?= $_GET['commande_id'] ?>" class="btn btn-danger ">Annuler la commande</a>
+    </div>
+  </div>
 
   <table class="table">
     <thead class="thead-dark">
