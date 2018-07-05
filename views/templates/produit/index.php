@@ -1,25 +1,11 @@
 <?php $title = 'Liste des produits'?>
 
 <?php ob_start(); ?>
-<div class="container pt-4">
   <h1 class="text-left"><?= $title ?></h1>
-  <div class="container d-flex m-4">
-    <form action="index.php?controller=produit&amp;action=search" method="POST" class="form-inline ml-auto">
-      <input name="nom_produit" class="form-control mr-sm-2" type="search" id="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </div>
-  <div class="container d-flex m-4">
-  <?php 
-      //categorie::select_cat();
-      echo $categorieListe;
-      if($_SESSION['role_id'] == 1):
-  ?>
-  <a class="btn btn-primary m-4" href="index.php?controller=produit&amp;action=create" role="button">Créer un produit</a>
-  <?php 
-      endif;
-  ?>
-  </div>
+
+    <a class="btn btn-primary m-4" href="index.php?controller=produit&amp;action=create" role="button">Créer un produit</a>
+    <input name="nom_produit" class="form-control mr-sm-2 col-sm-6 ml-auto" style="display: inline-block;" type="search" id="search-admin" placeholder="Search" aria-label="Search">
+
 
   <table class="table">
     <thead class="thead-dark">
@@ -52,11 +38,11 @@
             <td>
             <?php if($_SESSION['role_id'] == 1): ?>
 
-            <a href="index.php?controller=produit&amp;action=edit&amp;produit_id=<?= $produit['id'] ?>">Modifier</a> </td>
-            <td> <a href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer</a> </td>
+            <a class="btn btn-primary" href="index.php?controller=produit&amp;action=edit&amp;produit_id=<?= $produit['id'] ?>">Modifier</a> </td>
+            <td> <a class="btn btn-primary" href="index.php?controller=produit&amp;action=destroy&amp;produit_id=<?= $produit['id'] ?>">Supprimer</a> </td>
             
             <?php else:  ?>
-            <a href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
+            <a class="btn btn-primary" href="index.php?controller=panier_produit&amp;action=store&amp;produit_id=<?= $produit['id'] ?>">Ajouter au panier</a>
             
             <?php endif;  ?>
             </td>

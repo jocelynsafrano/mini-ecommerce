@@ -73,7 +73,8 @@ class panier_produit{
 
         $nombreProduits = $this->StructList($query, $returnFields, $bind);
 
-        if(intval($nombreProduits[0]['COUNT(*))']) === 0){
+
+        if(intval($nombreProduits[0]['COUNT(*)']) === 0){
             $_SESSION['messages'] = [
                 'body' => "Malheuresement, votre panier est vide.",
                 'type' => "danger"

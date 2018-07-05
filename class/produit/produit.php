@@ -23,14 +23,14 @@ class produit{
     }
 
     public function index(){
-        $query = 'SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id';
+        $query = 'SELECT p.id, p.nom, p.description, GROUP_CONCAT(c.nom) AS nom_categorie, p.prix_ht, p.date_creation, p.date_modification FROM produit AS p LEFT JOIN categorie_produit AS cp ON p.id = cp.produit_id LEFT JOIN categorie AS c ON cp.categorie_id = c.id WHERE p.is_deleted = 0 GROUP BY p.id DESC';
     
         $returnFields = ['id', 'nom', 'description', 'nom_categorie', 'prix_ht', 'date_creation', 'date_modification'];
         
         $produits = $this->StructList($query, $returnFields);
         
         $config['attr']['id'] = "categorie"; 
-        $config['attr']['class'] = "custom-select col-sm-6 "; 
+        $config['attr']['class'] = "custom-select col-sm-2 "; 
         ob_start();
         $this->categorie->SelectList( "categorie_id" , "id" , "nom" , $config);
         $categorieListe = ob_get_clean();
@@ -213,10 +213,6 @@ die(); */
             return;
         }
 
-        if(!isset($this->post['categorie_id']) || empty($this->post['categorie_id'])){
-            echo "Aucune catégorie n'est séléctionnée !";
-            return;
-        }
 
         $this->Set('id', $this->post['produit_id']);
 
@@ -230,14 +226,6 @@ die(); */
         $this->Update();
         
         //die();
-        
-
-        foreach($this->post['categorie_id'] as $categorie_id){
-        $this->categorie_produit->Set('produit_id', $this->post['produit_id']);
-            
-            $this->categorie_produit->Set('categorie_id',   $categorie_id);
-            $this->categorie_produit->Add();
-        }
         
         $_SESSION['messages'] = [
             'body' => "Produit a été modifé!",

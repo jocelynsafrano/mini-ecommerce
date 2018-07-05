@@ -19,7 +19,6 @@
                 <input name="prix_ht" type="text" class="form-control" id="prix_ht" value="<?= $produit['prix_ht'] ?>">
             </div>
             
-            <?= $categorieSelectList ?>
             <input name="produit_id" type="hidden" value="<?= $produit['id'] ?>">
             
             <button type="submit" class="btn btn-primary">Edit</button>

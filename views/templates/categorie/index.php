@@ -29,8 +29,8 @@
       <td><?= $categorie['description'] ?></td>
       <td><?= $categorie['date_creation'] ?></td>
       <td><?= $categorie['date_modification'] ?></td>
-      <td><a href="index.php?controller=categorie&amp;action=edit&amp;categorie_id=<?= $categorie['id'] ?>">Modifier la catégorie</a></td>
-      <td><a href="index.php?controller=categorie&amp;action=destroy&amp;categorie_id=<?= $categorie['id'] ?>">Supprimer la catégorie</a>        
+      <td><a class="btn btn-default" href="index.php?controller=categorie&amp;action=edit&amp;categorie_id=<?= $categorie['id'] ?>">Modifier la catégorie</a></td>
+      <td><a class="btn btn-default" href="index.php?controller=categorie&amp;action=destroy&amp;categorie_id=<?= $categorie['id'] ?>">Supprimer la catégorie</a>        
       </tr>
   <?php 
   $i++;

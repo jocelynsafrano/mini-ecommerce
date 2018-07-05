@@ -68,7 +68,9 @@ class commande_produit{
         // Copier les produits du panier et les assigner à la commande
         $req = "INSERT INTO commande_produit (commande_id, produit_id)
         SELECT :commande_id, produit_id
-        FROM panier_produit, panier
+        FROM panier_produit 
+        INNER JOIN panier ON panier_produit.panier_id = panier.id
+        INNER JOIN produit ON produit.id = panier_produit.produit_id
         WHERE panier.utilisateur_id = :id";
         
         $bind = array(
@@ -114,7 +116,6 @@ class commande_produit{
             header('Location: index.php?controller=auth&action=index');
             exit;
         }
-        // TODO : swith to == when admin login is added
        
         $req = "SELECT commande_produit.id, `commande_id`, `produit_id`, produit.nom nom_produit, produit.description description_produit , prix_ht FROM `commande_produit` INNER JOIN produit ON produit.id = commande_produit.produit_id LEFT JOIN commande ON commande.id = commande_produit.commande_id WHERE commande_produit.commande_id = :commande_id AND commande.utilisateur_id = :utilisateur_id";
         
